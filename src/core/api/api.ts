@@ -6,6 +6,7 @@ import {
   requestLoggerInterceptor,
   responseLoggerInterceptor,
 } from './interceptors'
+import { delay } from '@/common/functional'
 
 export const baseURL = import.meta.env.VITE_API_URL
 
@@ -26,7 +27,7 @@ instance.interceptors.response.use(
 )
 
 export const api = {
-  request(config: IApiRequestConfig) {
+  async request(config: IApiRequestConfig) {
     const onSuccess = config.onSuccess
     const onError = config.onError
 
@@ -42,15 +43,13 @@ export const api = {
         },
       }
     }
-		
-    instance
-      .request(config)
-      .then((data: AxiosResponse) => {
-        if (onSuccess) onSuccess(data)
-      })
-      .catch((err) => {
-        if (onError) onError(err)
-      })
+
+    try {
+      const [_, response] = await Promise.all([delay(1000), await instance.request(config)])
+      if (onSuccess) onSuccess(response)
+    } catch (err) {
+      if (onError) onError(err)
+    }
   },
 
   get(url: string, config: IApiRequestConfig) {
