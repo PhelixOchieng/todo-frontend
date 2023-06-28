@@ -20,5 +20,9 @@ export interface IApiRequestParams {
 }
 
 export interface IApiResponse<T = unknown> extends AxiosResponse {
-  data: T
+  data: {
+		error: boolean;
+		message?: string;
+		data: T
+	}
 }

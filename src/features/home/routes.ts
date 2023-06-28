@@ -15,8 +15,8 @@ export const homeRoutes: RouteRecordRaw[] = [
         component: ListView,
       },
       {
-        path: 'properties/:id',
-        name: 'property-details',
+        path: 'todos/:id',
+        name: 'todo-details',
         component: DetailsView,
       },
     ],

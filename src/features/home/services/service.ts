@@ -14,7 +14,7 @@ export const todosService = {
       api.get(`${basePath}/`, { params, onSuccess: resolve, onError: reject })
     })
   },
-  retrieveOne(id: number) {
+  retrieveOne(id: string) {
     return new Promise<TTodoApiResponse>((resolve, reject) => {
       api.get(`${basePath}/${id}/`, { onSuccess: resolve, onError: reject })
     })

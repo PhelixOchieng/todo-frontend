@@ -36,13 +36,15 @@ export function parseParams(params: any) {
 }
 
 export function getErrorMessage(err: any, message = 'An error occured. Please try again later.') {
+	let msg = message;
   const errCode = (err as AxiosError).code
   if (errCode && ['ERR_NETWORK', 'ECONNABORTED'].includes(errCode))
-    message =
+    msg =
       'Could not connect to our servers. Make sure you have an internet connection and try again.'
 
-  const resp: IApiResponse<{ error?: string, message?: string }> = (err as any).response
-  if (resp) message = resp.data.error ?? resp.data.message ?? message
+  const resp: IApiResponse = (err as any).response
+  if (resp) msg = resp.data.message ?? message
 	
-  return message
+	if (msg === message) console.error(err);
+  return msg
 }

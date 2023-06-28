@@ -25,9 +25,9 @@
 }
 
 @layer components {
-	.c-container {
-		@apply md:max-w-7xl mx-auto px-3;
-	}
+  .c-container {
+    @apply mx-auto px-3 md:max-w-7xl;
+  }
 
   .flex-centered {
     @apply flex items-center justify-center;

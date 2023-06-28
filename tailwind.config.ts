@@ -8,16 +8,16 @@ const config = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: colors.orange[500],
-          dark: colors.orange[700],
+					DEFAULT: colors.violet[500],
+					dark: colors.violet[700],
         },
         'on-primary': {
           DEFAULT: '#000',
           dark: '#000',
         },
         secondary: {
-          DEFAULT: colors.green[500],
-          dark: colors.green[700],
+					DEFAULT: colors.orange[500],
+					dark: colors.orange[700],
         },
 				container: {
 					DEFAULT: colors.white,

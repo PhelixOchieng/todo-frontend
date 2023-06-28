@@ -1,43 +1,47 @@
 <template>
-  <main class="c-container bg-orange-100 pb-20 pt-8">
+  <main class="c-container pb-20 pt-8">
     <div v-if="apiHandle.isLoading.value" class="flex items-center gap-x-3">
-      <p>Fetching properties...</p>
+      <p>Fetching todos...</p>
       <DotsLoader />
     </div>
-    <Status
-      v-else-if="apiHandle.isError.value"
-      variant="error"
-      class="error mx-auto mb-3 bg-red-50 first-letter:capitalize md:max-w-[580px]"
-    >
+    <Status v-else-if="apiHandle.isError.value" variant="error" @retry="getTodos">
       {{ apiMsg }}
     </Status>
     <template v-else>
-
-      <div v-if="properties.length === 0" class="text-center">
+      <div v-if="todos.length === 0" class="text-center">
         <p>You have not added any todos yet</p>
+      </div>
+      <div v-else class="mx-auto space-y-2 md:max-w-md">
+        <TodoCard
+          v-for="(todo, i) in todos"
+          :key="`todo-${todo.id}`"
+          :todo="todo"
+          :style="`z-index: ${todos.length - i}`"
+					class="relative"
+        />
       </div>
     </template>
   </main>
 </template>
 
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
 import { storeToRefs } from 'pinia'
 
 import { useApiHandle } from '@/core/api/composables'
-import { DotsLoader, Status, AvatarImage } from '@/features/common/components'
+import { DotsLoader, Status } from '@/features/common/components'
 
-import { usePropertiesStore } from '../store'
+import { useTodosStore } from '../store'
+import TodoCard from '../components/TodoCard.vue'
 
-const store = usePropertiesStore()
-const { propertiesApiStatus: apiStatus, propertiesApiMsg: apiMsg, properties } = storeToRefs(store)
+const store = useTodosStore()
+const { todosApiStatus: apiStatus, todosApiMsg: apiMsg, todos } = storeToRefs(store)
 const apiHandle = useApiHandle(apiStatus)
 
-// getTodos()
+getTodos()
 function getTodos() {
-  store.retrieveAll({
+  store.getTodos({
     page: 1,
-    limit: 100,
+    pageSize: 100,
   })
 }
 </script>

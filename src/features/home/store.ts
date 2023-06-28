@@ -36,7 +36,8 @@ export const useTodosStore = defineStore('todosStore', {
         this.todosApiMsg = ''
 
         const response = await todosService.retrieveAll(params)
-        this.todos = response.data.map((json) => TodoModel.fromJson(json))
+        const data = response.data.data
+        this.todos = data.map((json) => TodoModel.fromJson(json))
 
         this.todosApiStatus = IApiRequestStatus.Success
       } catch (e) {
@@ -46,19 +47,14 @@ export const useTodosStore = defineStore('todosStore', {
         this.todosApiMsg = message
       }
     },
-    async getTodo(id: number) {
+    async getTodo(id: string) {
       try {
-        const todo = this.todos?.find((i) => i.id === id)
-        if (todo) {
-          this.todo = todo
-          return
-        }
-
         this.todoApiStatus = IApiRequestStatus.Loading
         this.todoApiMsg = ''
 
         const response = await todosService.retrieveOne(id)
-        this.todo = TodoModel.fromJson(response.data)
+        const data = response.data.data
+        this.todo = TodoModel.fromJson(data)
 
         this.todoApiStatus = IApiRequestStatus.Success
       } catch (e) {
