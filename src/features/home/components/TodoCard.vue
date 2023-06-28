@@ -3,7 +3,7 @@
     :class="twMerge(
             'group block rounded-md border border-slate-200 bg-container px-6 py-3',
             'shadow transition-[box-shadow,transform] duration-300',
-            'hover:scale-105 hover:shadow-lg',
+            'hover:scale-105 hover:shadow-md',
 						$attrs.class as string,
           )"
   >
@@ -14,7 +14,7 @@
           :class="[
             'btn-icon h-7 w-7 translate-x-1 bg-transparent text-slate-900 transition-[color,background-color,transform]',
             'duration-200 hover:!bg-primary/20 hover:!delay-0 group-hover:bg-primary/10 group-hover:text-primary-dark',
-            'group-hover:translate-x-0 group-hover:delay-300',
+            'group-hover:translate-x-0 group-hover:delay-[400ms]',
             'group/btn relative',
           ]"
         >
@@ -35,7 +35,7 @@
           :class="[
             'btn-icon translate-x-1 bg-transparent p-1 text-slate-900 transition-[color,background-color,transform]',
             'duration-200 hover:!bg-primary/20 hover:!delay-0',
-            'group-hover:translate-x-0 group-hover:bg-primary/10 group-hover:text-primary-dark group-hover:delay-200',
+            'group-hover:translate-x-0 group-hover:bg-primary/10 group-hover:text-primary-dark group-hover:delay-300',
           ]"
         >
           <XMarkIcon v-if="todo.isCompleted" class="h-4 w-4" />
@@ -113,9 +113,9 @@ interface ITodoAction {
 const todoActions: ITodoAction[] = [
   {
     key: 'editTodo',
-    name: 'Edit Item',
-    outlineIcon: ViewOutlineIcon,
-    solidIcon: ViewSolidIcon,
+    name: 'Edit',
+    outlineIcon: UpdateOutlineIcon,
+    solidIcon: UpdateSolidIcon,
     onSelect(todo) {
       console.log('Selected', todo)
     },
