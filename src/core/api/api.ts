@@ -45,7 +45,10 @@ export const api = {
     }
 
     try {
-      const [_, response] = await Promise.all([delay(1000), await instance.request(config)])
+      const [_, response] = await Promise.all([
+        delay(250 + Math.random() * 250),						// delay between 250 - 500 ms
+        await instance.request(config),
+      ])
       if (onSuccess) onSuccess(response)
     } catch (err) {
       if (onError) onError(err)

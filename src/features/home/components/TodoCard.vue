@@ -76,7 +76,7 @@
     <p class="mt-2 truncate text-sm opacity-80">{{ todo.description }}</p>
     <div class="mt-1 flex items-center gap-x-1 opacity-60">
       <CalendarDaysIcon class="h-4 w-4" />
-      <p class="text-sm">{{ parseDate(todo.createdAt) }}</p>
+      <p class="text-xs">Created: {{ parseDate(todo.createdAt) }}</p>
     </div>
   </div>
 </template>
@@ -156,9 +156,8 @@ async function toggleCompleted() {
 function parseDate(date: Date): string {
   const now = new Date()
 
-  return format(date, 'dd-MM-yyyy')
-  if (differenceInDays(date, now) <= 7) return formatRelative(date, now)
-  else if (differenceInMonths(date, now) <= 12) return format(date, '')
+	if (differenceInDays(date, now) <= 7) return formatRelative(date, now).replace(/^\w/, (v) => v.toUpperCase())
+  else if (differenceInMonths(date, now) <= 12) return format(date, 'MMM do, yyyy')
   else return format(date, 'dd-MM-yyyy')
 }
 </script>
