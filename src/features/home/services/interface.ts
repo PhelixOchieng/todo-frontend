@@ -10,3 +10,6 @@ export interface ITodosParams {
 
 export type TTodosApiResponse = IApiResponse<ITodoJson[]>
 export type TTodoApiResponse = IApiResponse<ITodoJson>
+
+export type TTodoUpdatePayload = Partial<Exclude<ITodoJson, 'id' | 'createdAt' | 'updatedAt'>>
+export type TTodoUpdateApiResponse = TTodoApiResponse;

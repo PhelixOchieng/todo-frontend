@@ -1,9 +1,11 @@
 import { api } from '@/core/api'
 
-import type {
-  TTodosApiResponse,
-  ITodosParams,
-  TTodoApiResponse,
+import {
+  type TTodosApiResponse,
+  type ITodosParams,
+  type TTodoApiResponse,
+  type TTodoUpdateApiResponse,
+  type TTodoUpdatePayload,
 } from './interface'
 
 const basePath = 'todos'
@@ -17,6 +19,14 @@ export const todosService = {
   retrieveOne(id: string) {
     return new Promise<TTodoApiResponse>((resolve, reject) => {
       api.get(`${basePath}/${id}/`, { onSuccess: resolve, onError: reject })
+    })
+  },
+  updateOne(id: string, payload: TTodoUpdatePayload) {
+    return new Promise<TTodoUpdateApiResponse>((resolve, reject) => {
+      api.patch(`${basePath}/${id}/`, payload, {
+        onSuccess: resolve,
+        onError: reject,
+      })
     })
   },
 }

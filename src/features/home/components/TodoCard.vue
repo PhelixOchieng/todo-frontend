@@ -35,8 +35,11 @@
           :class="[
             'btn-icon translate-x-1 bg-transparent p-1 text-slate-900 transition-[color,background-color,transform]',
             'duration-200 hover:!bg-primary/20 hover:!delay-0',
-            'group-hover:translate-x-0 group-hover:bg-primary/10 group-hover:text-primary-dark group-hover:delay-300',
+            apiHandle.isLoading.value && todoIDBeingUpdated === todo.id.toString()
+              ? 'loading'
+              : 'group-hover:translate-x-0 group-hover:bg-primary/10 group-hover:text-primary-dark group-hover:delay-300',
           ]"
+					@click.stop="toggleCompleted"
         >
           <XMarkIcon v-if="todo.isCompleted" class="h-4 w-4" />
           <CheckIcon v-else class="h-4 w-4" />
@@ -99,8 +102,20 @@ import {
 import { DropdownButton } from '@/features/common/components'
 
 import TodoModel from '../models/todo.model'
+import type { TTodoUpdatePayload } from '../services'
+import { useTodosStore } from '../store'
+import { storeToRefs } from 'pinia'
+import { useApiHandle } from '@/core/api/composables'
 
-defineProps<{ todo: TodoModel }>()
+const store = useTodosStore()
+const {
+  todoUpdateApiStatus: apiStatus,
+  todoUpdateApiMsg: apiMsg,
+  todoIDBeingUpdated,
+} = storeToRefs(store)
+const apiHandle = useApiHandle(apiStatus)
+
+const props = defineProps<{ todo: TodoModel }>()
 
 interface ITodoAction {
   name: string
@@ -109,7 +124,6 @@ interface ITodoAction {
   solidIcon: FunctionalComponent
   onSelect: (todo: TodoModel) => void
 }
-
 const todoActions: ITodoAction[] = [
   {
     key: 'editTodo',
@@ -131,12 +145,20 @@ const todoActions: ITodoAction[] = [
   },
 ]
 
+async function toggleCompleted() {
+  const payload: TTodoUpdatePayload = {
+    isCompleted: !props.todo.isCompleted,
+  }
+
+  await store.updateTodo(props.todo.id.toString(), payload)
+}
+
 function parseDate(date: Date): string {
   const now = new Date()
 
   return format(date, 'dd-MM-yyyy')
   if (differenceInDays(date, now) <= 7) return formatRelative(date, now)
   else if (differenceInMonths(date, now) <= 12) return format(date, '')
-  else return format(date, 'YYYY-MM-dd')
+  else return format(date, 'dd-MM-yyyy')
 }
 </script>

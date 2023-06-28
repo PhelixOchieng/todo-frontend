@@ -1,2 +1,2 @@
 export * from './interface'
-export * from './properties.service'
+export * from './service'
