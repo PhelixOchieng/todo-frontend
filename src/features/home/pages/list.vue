@@ -12,6 +12,7 @@
       {{ apiMsg }}
     </Status>
     <template v-else>
+
       <div v-if="properties.length === 0" class="text-center">
         <p>You have not added any todos yet</p>
       </div>

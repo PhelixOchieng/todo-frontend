@@ -3,96 +3,69 @@ import { defineStore } from 'pinia'
 import { IApiRequestStatus } from '@/core/api'
 import { getErrorMessage } from '@/core/api/utils'
 
-import Property from './models/property.model'
-import type { IPropertiesParams } from './services/interface'
-import { propertiesService } from './services/properties.service'
-import LocationModel from './models/location.model'
+import TodoModel from './models/todo.model'
+import type { ITodosParams } from './services/interface'
+import { todosService } from './services/service'
 
 interface IState {
-  propertiesApiStatus: IApiRequestStatus
-  propertiesApiMsg: string
-  properties: Property[]
+  todosApiStatus: IApiRequestStatus
+  todosApiMsg: string
+  todos: TodoModel[]
 
-  locationsApiStatus: IApiRequestStatus
-  locationsApiMsg: string
-  locations: LocationModel[] | null
-
-  propertyApiStatus: IApiRequestStatus
-  propertyApiMsg: string
-  property: Property | null
+  todoApiStatus: IApiRequestStatus
+  todoApiMsg: string
+  todo: TodoModel | null
 }
 
 const state = (): IState => ({
-  propertiesApiStatus: IApiRequestStatus.Default,
-  propertiesApiMsg: '',
-  properties: [],
+  todosApiStatus: IApiRequestStatus.Default,
+  todosApiMsg: '',
+  todos: [],
 
-  locationsApiStatus: IApiRequestStatus.Default,
-  locationsApiMsg: '',
-  locations: null,
-
-  propertyApiStatus: IApiRequestStatus.Default,
-  propertyApiMsg: '',
-  property: null,
+  todoApiStatus: IApiRequestStatus.Default,
+  todoApiMsg: '',
+  todo: null,
 })
 
-export const usePropertiesStore = defineStore('propertiesStore', {
+export const useTodosStore = defineStore('todosStore', {
   state,
   actions: {
-    async retrieveAll(params: IPropertiesParams) {
+    async getTodos(params: ITodosParams) {
       try {
-        this.propertiesApiStatus = IApiRequestStatus.Loading
-        this.propertiesApiMsg = ''
+        this.todosApiStatus = IApiRequestStatus.Loading
+        this.todosApiMsg = ''
 
-        const response = await propertiesService.retrieveAll(params)
-        this.properties = response.data.map((p) => Property.fromJson(p))
+        const response = await todosService.retrieveAll(params)
+        this.todos = response.data.map((json) => TodoModel.fromJson(json))
 
-        this.propertiesApiStatus = IApiRequestStatus.Success
+        this.todosApiStatus = IApiRequestStatus.Success
       } catch (e) {
-        this.propertiesApiStatus = IApiRequestStatus.Error
+        this.todosApiStatus = IApiRequestStatus.Error
 
         const message = getErrorMessage(e)
-        this.propertiesApiMsg = message
+        this.todosApiMsg = message
       }
     },
-    async retrieveOne(id: string) {
+    async getTodo(id: number) {
       try {
-        const property = this.properties?.find((p) => p.id === id)
-        if (property) {
-          this.property = property
+        const todo = this.todos?.find((i) => i.id === id)
+        if (todo) {
+          this.todo = todo
           return
         }
 
-        this.propertyApiStatus = IApiRequestStatus.Loading
-        this.propertyApiMsg = ''
+        this.todoApiStatus = IApiRequestStatus.Loading
+        this.todoApiMsg = ''
 
-        const response = await propertiesService.retrieveOne(id)
-        this.property = Property.fromJson(response.data)
+        const response = await todosService.retrieveOne(id)
+        this.todo = TodoModel.fromJson(response.data)
 
-        this.propertyApiStatus = IApiRequestStatus.Success
+        this.todoApiStatus = IApiRequestStatus.Success
       } catch (e) {
-        this.propertyApiStatus = IApiRequestStatus.Error
+        this.todoApiStatus = IApiRequestStatus.Error
 
         const message = getErrorMessage(e)
-        this.propertyApiMsg = message
-      }
-    },
-
-    async getLocations() {
-      try {
-        this.locationsApiStatus = IApiRequestStatus.Loading
-        this.locationsApiMsg = ''
-
-        const response = await propertiesService.getLocations()
-        const data = response.data
-        this.locations = data.map((e) => LocationModel.fromJson(e))
-
-        this.locationsApiStatus = IApiRequestStatus.Success
-      } catch (e) {
-        this.locationsApiStatus = IApiRequestStatus.Error
-
-        const message = getErrorMessage(e)
-        this.locationsApiMsg = message
+        this.todoApiMsg = message
       }
     },
   },

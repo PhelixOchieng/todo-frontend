@@ -1,18 +1,12 @@
 import type { IApiResponse } from '@/core/api'
 
-import type { IPropertyJson } from '../models/property.interface';
-import type { ILocationJson } from '../models/location.interface';
+import type { ITodoJson } from '../models/todo.interface'
 
-
-export interface IPropertiesParams {
-	page?: number;
-	limit?: number;
-	price?: string;
-	city?: string;
-	neighborhood?: string;
+export interface ITodosParams {
+  page?: number
+  pageSize?: number
+  title?: number
 }
-export interface IPropertiesApiResponse extends IApiResponse<IPropertyJson[]> {}
 
-export interface IPropertyApiResponse extends IApiResponse<IPropertyJson> {}
-
-export type TLocationsApiResponse = IApiResponse<ILocationJson[]>
+export type TTodosApiResponse = IApiResponse<ITodoJson[]>
+export type TTodoApiResponse = IApiResponse<ITodoJson>

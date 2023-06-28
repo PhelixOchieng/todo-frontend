@@ -1,5 +1,5 @@
-export interface IPropertyJson {
-	id: string;
+export interface ITodoJson {
+	id: number;
 	title: string;
 	description: string;
 	createdAt: string;
@@ -7,8 +7,8 @@ export interface IPropertyJson {
 	isCompleted: boolean;
 }
 
-export interface IProperty {
-	id: string;
+export interface ITodo {
+	id: number;
 	title: string;
 	description: string;
 	createdAt: Date;
