@@ -76,7 +76,7 @@ interface IFormOptions {
 }
 export class Form {
   // eslint-disable-next-line no-useless-constructor
-  constructor(private _fields: IFormFields, private _opts?: IFormOptions) {}
+  constructor(private _fields: Record<string, FormField>, private _opts?: IFormOptions) {}
 
   validate(): boolean {
     const fields = this._fields
@@ -91,7 +91,7 @@ export class Form {
     return optsValid
   }
 
-  getField<T>(name: string): FormField<T> | null {
+  getField<T>(name: keyof Form['_fields']): FormField<T> | null {
     return (this._fields[name] as FormField<T> | undefined) ?? null
   }
 

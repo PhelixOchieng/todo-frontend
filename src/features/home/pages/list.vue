@@ -84,6 +84,8 @@
       </template>
     </template>
   </main>
+
+	<AddTodo />
 </template>
 
 <script setup lang="ts">
@@ -95,8 +97,9 @@ import { useApiHandle } from '@/core/api/composables'
 import { DotsLoader, Status } from '@/features/common/components'
 
 import { useTodosStore } from '../store'
-import TodoCard from '../components/TodoCard.vue'
 import TodoModel from '../models/todo.model'
+import TodoCard from '../components/TodoCard.vue'
+import AddTodo from '../components/AddTodo.vue'
 
 const store = useTodosStore()
 const { todosApiStatus: apiStatus, todosApiMsg: apiMsg, todos } = storeToRefs(store)
