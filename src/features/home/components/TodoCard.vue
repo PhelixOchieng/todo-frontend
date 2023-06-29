@@ -39,7 +39,7 @@
               ? 'loading'
               : 'group-hover:translate-x-0 group-hover:bg-primary/10 group-hover:text-primary-dark group-hover:delay-300',
           ]"
-					@click.stop="toggleCompleted"
+          @click.stop="toggleCompleted"
         >
           <XMarkIcon v-if="todo.isCompleted" class="h-4 w-4" />
           <CheckIcon v-else class="h-4 w-4" />
@@ -65,7 +65,7 @@
             >
               <component
                 :is="active ? item.solidIcon : item.outlineIcon"
-                :class="['h-5 w-5', { 'text-white': active }]"
+                :class="['h-4 w-4', active ? 'text-white' : 'text-primary-dark']"
               />
               {{ item.name }}
             </button>
@@ -156,7 +156,8 @@ async function toggleCompleted() {
 function parseDate(date: Date): string {
   const now = new Date()
 
-	if (differenceInDays(date, now) <= 7) return formatRelative(date, now).replace(/^\w/, (v) => v.toUpperCase())
+  if (differenceInDays(date, now) <= 7)
+    return formatRelative(date, now).replace(/^\w/, (v) => v.toUpperCase())
   else if (differenceInMonths(date, now) <= 12) return format(date, 'MMM do, yyyy')
   else return format(date, 'dd-MM-yyyy')
 }
