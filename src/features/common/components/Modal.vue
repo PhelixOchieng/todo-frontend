@@ -58,7 +58,7 @@ const isOpenInternal = ref(false)
 const isOpen = computed<boolean>(() => props.useInternalState ? isOpenInternal.value : props.modelValue);
 
 function closeModal() {
-	isOpenInternal.value = true
+	isOpenInternal.value = false
 	emit('update:modelValue', false)
   emit('close')
 }

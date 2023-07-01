@@ -8,7 +8,7 @@
 						$attrs.class as string,
           ),
 				todo.isCompleted ? 'opacity-80 hover:opacity-100' : 'opacity-100'
-		]"
+				]"
   >
     <div class="flex items-center justify-between gap-x-4">
       <div class="relative overflow-hidden">
@@ -22,27 +22,63 @@
         />
       </div>
       <div class="flex items-center gap-x-1">
-        <button
-          :class="[
-            'btn-icon h-7 w-7 translate-x-1 bg-transparent text-slate-900 transition-[color,background-color,transform]',
-            'duration-200 hover:!bg-primary/20 hover:!delay-0 group-hover:bg-primary/10 group-hover:text-primary-dark',
-            'group-hover:translate-x-0 group-hover:delay-[400ms]',
-            'group/btn relative',
-          ]"
-        >
-          <ViewOutlineIcon
-            :class="[
-              'absolute left-1/2 top-1/2 !h-4 !w-4 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300',
-              'group-hover/btn:opacity-0',
-            ]"
-          />
-          <ViewSolidIcon
-            :class="[
-              'absolute left-1/2 top-1/2 !h-4 !w-4 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-300',
-              'group-hover/btn:opacity-100',
-            ]"
-          />
-        </button>
+        <Modal show-title>
+          <template #trigger="{ openModal }">
+            <button
+              :class="[
+                'btn-icon h-7 w-7 translate-x-1 bg-transparent text-slate-900 transition-[color,background-color,transform]',
+                'duration-200 hover:!bg-primary/20 hover:!delay-0 group-hover:bg-primary/10 group-hover:text-primary-dark',
+                'group-hover:translate-x-0 group-hover:delay-[400ms]',
+                'group/btn relative',
+              ]"
+              @click="openModal"
+            >
+              <ViewOutlineIcon
+                :class="[
+                  'absolute left-1/2 top-1/2 !h-4 !w-4 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300',
+                  'group-hover/btn:opacity-0',
+                ]"
+              />
+              <ViewSolidIcon
+                :class="[
+                  'absolute left-1/2 top-1/2 !h-4 !w-4 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-300',
+                  'group-hover/btn:opacity-100',
+                ]"
+              />
+            </button>
+          </template>
+          <template #title>
+            <h2 class="text-center">Todo Details</h2>
+          </template>
+          <template #default="{ closeModal }">
+            <div class="space-y-4">
+              <div>
+                <p class="text-xs font-bold uppercase">Title</p>
+                <p class="">{{ todo.title }}</p>
+              </div>
+              <div v-if="todo.description">
+                <p class="text-xs font-bold uppercase">Description</p>
+                <p class="">{{ todo.description }}</p>
+              </div>
+              <div v-if="todo.isCompleted">
+                <p class="text-xs font-bold uppercase">Completed</p>
+                <p class="">{{ parseDate(todo.completedAt) }}</p>
+              </div>
+              <div class="flex gap-x-4">
+                <div class="flex-1">
+                  <p class="text-xs font-bold uppercase">Created</p>
+                  <p class="">{{ parseDate(todo.createdAt) }}</p>
+                </div>
+                <div class="flex-1">
+                  <p class="text-xs font-bold uppercase">Updated</p>
+                  <p class="">{{ parseDate(todo.updatedAt) }}</p>
+                </div>
+              </div>
+            </div>
+
+            <BackButton class="mx-auto mt-6" @click="closeModal" custom />
+          </template>
+        </Modal>
         <button
           :class="[
             'btn-icon translate-x-1 bg-transparent p-1 text-slate-900 transition-[color,background-color,transform]',
@@ -137,7 +173,7 @@ import {
 } from '@heroicons/vue/24/solid'
 
 import { useApiHandle } from '@/core/api/composables'
-import { DropdownButton, Modal, Snackbar } from '@/features/common/components'
+import { DropdownButton, BackButton, Modal, Snackbar } from '@/features/common/components'
 
 import TodoModel from '../models/todo.model'
 import type { TTodoUpdatePayload } from '../services'
@@ -190,7 +226,9 @@ async function toggleCompleted() {
   await store.updateTodo(props.todo.id.toString(), payload)
 }
 
-function parseDate(date: Date): string {
+function parseDate(date: Date | null): string {
+  if (date === null) return ''
+
   const now = new Date()
 
   if (differenceInDays(date, now) <= 7)

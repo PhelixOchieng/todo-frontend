@@ -4,16 +4,14 @@ export default class TodoModel implements ITodo {
   public id: number
   public title: string
   public description: string
-  public isCompleted: boolean
   public completedAt: Date | null
   public createdAt: Date
-  public updatedAt: Date
+  public updatedAt: Date | null
 
   constructor(data: ITodo) {
     this.id = data.id
     this.title = data.title
     this.description = data.description
-    this.isCompleted = data.isCompleted
     this.completedAt= data.completedAt
     this.createdAt = data.createdAt
     this.updatedAt = data.updatedAt
@@ -24,10 +22,13 @@ export default class TodoModel implements ITodo {
       id: json.id,
       title: json.title,
       description: json.description,
-      isCompleted: json.isCompleted,
       completedAt: json.completedAt ? new Date(json.completedAt) : null,
       createdAt: new Date(json.createdAt),
-      updatedAt: new Date(json.updatedAt),
+      updatedAt: json.updatedAt ? new Date(json.updatedAt) : null,
     })
   }
+
+	get isCompleted(): boolean {
+		return this.completedAt !== null;
+	}
 }
