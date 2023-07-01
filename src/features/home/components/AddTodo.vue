@@ -2,7 +2,10 @@
   <HeroModal :show-title="true" @close="handleModalClose">
     <template #trigger="{ openModal }">
       <button
-        class="btn fixed right-3 aspect-square rounded-xl max-md:bottom-8 md:right-10 md:top-20"
+        :class="[
+          'btn max-sm:fixed left-1/2 aspect-square -translate-x-1/2 rounded-xl max-md:bottom-8',
+          'md:right-10 md:top-20 md:translate-x-0',
+        ]"
         @click="openModal"
       >
         <PlusIcon class="h-5 w-5" />
@@ -39,6 +42,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { twMerge } from 'tailwind-merge'
 import { PlusIcon } from '@heroicons/vue/20/solid'
 
 import { Form, FormField } from '@/core/forms'
@@ -49,6 +53,10 @@ import { useTodosStore } from '../store'
 import { storeToRefs } from 'pinia'
 import { useApiHandle } from '@/core/api/composables'
 import type { TTodoAddPayload } from '../services'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const store = useTodosStore()
 const { todoAddApiStatus: apiStatus, todoAddApiMsg: apiMsg } = storeToRefs(store)

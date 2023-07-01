@@ -18,8 +18,7 @@
           class="w-full max-w-lg text-sm sm:px-0"
           @change="(index) => (selectedTodoType = index)"
         >
-          <div class="flex items-center justify-between gap-x-4">
-            <p class="hidden md:block">Showing</p>
+          <div class="flex sticky top-0 z-[1000] backdrop-blur py-3 items-center justify-between gap-x-2">
             <TabList class="flex flex-1 space-x-1 rounded-xl bg-slate-200 p-1">
               <Tab
                 v-for="(type, i) of todoTypes"
@@ -40,9 +39,9 @@
                 </button>
               </Tab>
             </TabList>
-            <p class="hidden md:block">Todos</p>
+						<AddTodo class="max-sm:fixed" />
           </div>
-          <div class="mb-2 mt-3 hidden h-[1px] bg-slate-200 md:block" aria-hidden="true" />
+          <div class="mb-2 hidden h-[1px] bg-slate-200 md:block" aria-hidden="true" />
           <TabPanels class="mt-2">
             <TransitionGroup
               :enter-from-class="`opacity-50 ${wentToNext ? 'translate-x-8' : '-translate-x-8'}`"
@@ -84,8 +83,6 @@
       </template>
     </template>
   </main>
-
-  <AddTodo />
 </template>
 
 <script setup lang="ts">
