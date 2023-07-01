@@ -86,9 +86,10 @@
       </div>
     </div>
     <p class="mt-2 truncate text-sm opacity-80">{{ todo.description }}</p>
-    <div class="mt-1 flex items-center gap-x-1 opacity-60">
+    <div class="mt-1 flex items-center gap-x-1 text-xs opacity-60">
       <CalendarDaysIcon class="h-4 w-4" />
-      <p class="text-xs">Created: {{ parseDate(todo.createdAt) }}</p>
+      <p v-if="todo.isCompleted">Completed: {{ parseDate(todo.completedAt!) }}</p>
+      <p v-else>Created: {{ parseDate(todo.createdAt) }}</p>
     </div>
 
     <Snackbar v-model="isSnackbarOpen" type="error" :msg="apiMsg" :timeout="0" />

@@ -5,6 +5,7 @@ export default class TodoModel implements ITodo {
   public title: string
   public description: string
   public isCompleted: boolean
+  public completedAt: Date | null
   public createdAt: Date
   public updatedAt: Date
 
@@ -13,6 +14,7 @@ export default class TodoModel implements ITodo {
     this.title = data.title
     this.description = data.description
     this.isCompleted = data.isCompleted
+    this.completedAt= data.completedAt
     this.createdAt = data.createdAt
     this.updatedAt = data.updatedAt
   }
@@ -23,6 +25,7 @@ export default class TodoModel implements ITodo {
       title: json.title,
       description: json.description,
       isCompleted: json.isCompleted,
+      completedAt: json.completedAt ? new Date(json.completedAt) : null,
       createdAt: new Date(json.createdAt),
       updatedAt: new Date(json.updatedAt),
     })
