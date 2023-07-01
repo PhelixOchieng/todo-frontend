@@ -11,7 +11,7 @@ import { useUserStore } from '../user/store'
 interface IState {
   loginApiStatus: IApiRequestStatus
   loginApiMsg: string
-	isUserAuthed: boolean
+  isUserAuthed: boolean
 
   signupApiStatus: IApiRequestStatus
   signupApiMsg: string
@@ -20,10 +20,10 @@ interface IState {
 const state = (): IState => ({
   loginApiStatus: IApiRequestStatus.Default,
   loginApiMsg: '',
-	isUserAuthed: isAuthTokenValid(),
+  isUserAuthed: isAuthTokenValid(),
 
   signupApiStatus: IApiRequestStatus.Default,
-  signupApiMsg: ''
+  signupApiMsg: '',
 })
 
 export const useAuthStore = defineStore('auth-store', {
@@ -38,7 +38,7 @@ export const useAuthStore = defineStore('auth-store', {
         const accessToken = response.data.access_token
 
         saveAuthToken(accessToken)
-				this.isUserAuthed = true;
+        this.isUserAuthed = true
         this.loginApiStatus = IApiRequestStatus.Success
       } catch (e) {
         this.loginApiStatus = IApiRequestStatus.Error
@@ -64,17 +64,17 @@ export const useAuthStore = defineStore('auth-store', {
       }
     },
 
-		logout() {
-			this.loginApiStatus = IApiRequestStatus.Default;
-			this.loginApiMsg = '';
-			this.signupApiStatus = IApiRequestStatus.Default;
-			this.signupApiMsg = '';
+    logout() {
+      this.loginApiStatus = IApiRequestStatus.Default
+      this.loginApiMsg = ''
+      this.signupApiStatus = IApiRequestStatus.Default
+      this.signupApiMsg = ''
 
-			const userStore = useUserStore()
-			userStore.reset()
+      const userStore = useUserStore()
+      userStore.reset()
 
-			removeAuthToken(TokenCategory.Access)
-			this.isUserAuthed = false
-		}
-  }
+      removeAuthToken(TokenCategory.Access)
+      this.isUserAuthed = false
+    },
+  },
 })

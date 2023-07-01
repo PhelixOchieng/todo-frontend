@@ -29,7 +29,7 @@
         >
           <ListboxOptions
             :class="[
-              'bg-container dark:bg-container-dark absolute z-[50] mt-2 max-h-60 w-full overflow-auto  rounded-md py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
+              'absolute z-[50] mt-2 max-h-60 w-full overflow-auto rounded-md bg-container  py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-container-dark sm:text-sm',
               optionsClass,
             ]"
           >
@@ -110,7 +110,7 @@ const selectedOption = computed<ISelectOption<T> | null>({
     )
   },
   set(value) {
-		emit('update:modelValue', value.key)
+    emit('update:modelValue', value.key)
   },
 })
 </script>

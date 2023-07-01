@@ -26,7 +26,7 @@ const config = {
 
         // text-colors
         light: colors.slate[900],
-        dart: colors.slate[50],
+        dark: colors.slate[50],
       },
     },
   },

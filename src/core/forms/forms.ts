@@ -55,7 +55,7 @@ export class FormField<T = any> implements IFormField<T> {
   }
 
   onInputChange(callback: (value: UnwrapRef<T | null>) => void): FormField {
-		watch(this.value, (v) => callback(v))
+    watch(this.value, (v) => callback(v))
     return this
   }
 

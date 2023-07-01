@@ -1,14 +1,16 @@
 <template>
-  <Teleport to=".snackbars">
-    <div
-      class="pointer-events-auto fixed bottom-0 left-1/2 z-10 w-full -translate-x-1/2 sm:w-fit sm:py-3"
-    >
-      <Transition name="slide">
-        <div
-          v-if="show"
-          class="flex w-full items-center justify-between p-4 md:w-fit md:max-w-lg md:rounded"
-          :class="classes"
-        >
+  <Teleport to="#snackbars">
+    <Transition name="slide">
+      <div
+        v-if="show"
+        :class="
+          twMerge(
+            'pointer-events-auto flex w-full items-center justify-between px-4 py-2 sm:w-fit md:w-fit md:max-w-lg md:rounded',
+            classes,
+          )
+        "
+      >
+        <slot :close="close">
           <span>{{ msg }}</span>
           <div
             class="ml-3 grid h-10 w-10 cursor-pointer place-items-center rounded-full transition-colors hover:bg-white/20"
@@ -16,20 +18,21 @@
           >
             <XMarkIcon class="h-5 w-5" />
           </div>
-        </div>
-      </Transition>
-    </div>
+        </slot>
+      </div>
+    </Transition>
   </Teleport>
 </template>
 
 <script setup lang="ts">
 import { computed, watch } from 'vue'
+import { twMerge } from 'tailwind-merge'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
 
 type TSnackbarType = 'info' | 'success' | 'error'
 interface IProps {
   modelValue: boolean
-  msg: string
+  msg?: string | number
   type?: TSnackbarType
   timeout?: number
 }

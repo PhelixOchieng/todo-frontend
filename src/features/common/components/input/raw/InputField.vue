@@ -1,6 +1,8 @@
 <template>
   <div>
-    <label v-if="label" :for="id">{{ label }}</label>
+    <slot name="label">
+      <label v-if="label" :for="id">{{ label }}</label>
+    </slot>
     <div class="relative">
       <input
         :id="id"
@@ -15,7 +17,7 @@
         ]"
         :min="min"
         :max="max"
-				@input="(e) => inputChange(e as InputEvent)"
+        @input="(e) => inputChange(e as InputEvent)"
         :disabled="disabled"
       />
       <div
@@ -55,7 +57,7 @@ const props = withDefaults(
     placeholder: '',
     value: '',
     disabled: false,
-  }
+  },
 )
 const emit = defineEmits<{
   (e: 'update:modelValue', data: string): void

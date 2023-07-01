@@ -8,14 +8,14 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter, type RouteLocationRaw } from "vue-router";
+import { useRouter, type RouteLocationRaw } from 'vue-router'
 
-import { ArrowLongLeftIcon } from "@heroicons/vue/24/outline";
+import { ArrowLongLeftIcon } from '@heroicons/vue/24/outline'
 
-const props = defineProps<{ to?: RouteLocationRaw }>();
+const props = defineProps<{ to?: RouteLocationRaw }>()
 
-const router = useRouter();
+const router = useRouter()
 function gotoRoute() {
-  (props.to && router.push(props.to)) || router.back();
+  ;(props.to && router.push(props.to)) || router.back()
 }
 </script>

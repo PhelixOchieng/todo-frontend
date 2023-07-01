@@ -59,5 +59,5 @@ export const responseLoggerInterceptor = {
     console.groupEnd()
 
     return Promise.reject(err)
-  }
+  },
 }

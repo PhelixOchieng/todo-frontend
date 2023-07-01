@@ -29,7 +29,7 @@
           @after-leave="query = ''"
         >
           <ComboboxOptions
-            class="bg-container dark:bg-container-dark dark:text-dark absolute mt-2 max-h-60 w-full overflow-auto rounded-md py-1 text-base text-light shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+            class="absolute mt-2 max-h-60 w-full overflow-auto rounded-md bg-container py-1 text-base text-light shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-container-dark dark:text-dark sm:text-sm"
           >
             <div
               v-if="filteredOptions.length === 0 && query !== ''"
@@ -98,16 +98,16 @@ const emit = defineEmits<{ 'update:modelValue': [value: T | null] }>()
 let query = ref('')
 
 const selectedOption = computed<IAutocompleteOption<T> | null>({
-	get() {
-		const opts = props.options;
-		const value = props.modelValue
-		if (opts === null || value === null) return null
-		
-		return opts?.find((opt) => opt.key === value)
-	},
-	set(value) {
-		emit('update:modelValue', value?.key ?? null)
-	}
+  get() {
+    const opts = props.options
+    const value = props.modelValue
+    if (opts === null || value === null) return null
+
+    return opts?.find((opt) => opt.key === value)
+  },
+  set(value) {
+    emit('update:modelValue', value?.key ?? null)
+  },
 })
 
 let filteredOptions = computed<IAutocompleteOption<T>[]>(() => {

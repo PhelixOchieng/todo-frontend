@@ -4,8 +4,9 @@ import { IApiRequestStatus } from '@/core/api'
 import { getErrorMessage } from '@/core/api/utils'
 
 import TodoModel from './models/todo.model'
-import type { ITodosParams, TTodoUpdatePayload } from './services/interface'
+import type { ITodosParams, TTodoAddPayload, TTodoUpdatePayload } from './services/interface'
 import { todosService } from './services/service'
+import { delay } from '@/common/functional'
 
 interface IState {
   todosApiStatus: IApiRequestStatus
@@ -19,6 +20,9 @@ interface IState {
   todoUpdateApiStatus: IApiRequestStatus
   todoUpdateApiMsg: string
   todoIDBeingUpdated: string | null
+
+  todoAddApiStatus: IApiRequestStatus
+  todoAddApiMsg: string
 }
 
 const state = (): IState => ({
@@ -33,6 +37,9 @@ const state = (): IState => ({
   todoUpdateApiStatus: IApiRequestStatus.Default,
   todoUpdateApiMsg: '',
   todoIDBeingUpdated: null,
+
+  todoAddApiStatus: IApiRequestStatus.Default,
+  todoAddApiMsg: '',
 })
 
 export const useTodosStore = defineStore('todosStore', {
@@ -94,6 +101,25 @@ export const useTodosStore = defineStore('todosStore', {
         this.todoUpdateApiMsg = message
       } finally {
         this.todoIDBeingUpdated = null
+      }
+    },
+    async addTodo(payload: TTodoAddPayload) {
+      try {
+        this.todoAddApiStatus = IApiRequestStatus.Loading
+        this.todoAddApiMsg = ''
+
+        const response = await todosService.addOne(payload)
+        const data = response.data.data
+        const todo = TodoModel.fromJson(data)
+        // Just delay for the add in animations 😉
+        delay(500, () => this.todos!.unshift(todo))
+
+        this.todoAddApiStatus = IApiRequestStatus.Success
+      } catch (e) {
+        this.todoAddApiStatus = IApiRequestStatus.Error
+
+        const message = getErrorMessage(e)
+        this.todoAddApiMsg = message
       }
     },
   },

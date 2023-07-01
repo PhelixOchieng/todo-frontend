@@ -4,7 +4,7 @@ export interface IAutocompleteOption<T> {
 }
 
 export interface IProps<T> {
-	modelValue: T | null
+  modelValue: T | null
   options?: IAutocompleteOption<T>[] | null
   id?: string
   name?: string

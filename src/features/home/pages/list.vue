@@ -61,10 +61,10 @@
               >
                 <TransitionGroup
                   move-class="transition-[opacity,transform] duration-500"
-                  enter-from-class="opacity-0 !scale-[0.5]"
+                  enter-from-class="opacity-0 !scale-[0.75]"
                   enter-active-class="transition-[opacity,transform] duration-500"
                   leave-active-class="transition-[opacity,transform] duration-500 !absolute"
-                  leave-to-class="opacity-0 !scale-[0.5]"
+                  leave-to-class="opacity-0 !scale-[0.75]"
                 >
                   <template v-if="todosToShow.length">
                     <TodoCard
@@ -85,7 +85,7 @@
     </template>
   </main>
 
-	<AddTodo />
+  <AddTodo />
 </template>
 
 <script setup lang="ts">
@@ -106,8 +106,8 @@ const { todosApiStatus: apiStatus, todosApiMsg: apiMsg, todos } = storeToRefs(st
 const apiHandle = useApiHandle(apiStatus)
 
 const prevSelectedTodoType = ref(0)
-const selectedTodoType = ref(0)
-const todoTypes = ['All', 'Completed', 'Not Completed'] as const
+const selectedTodoType = ref(1)
+const todoTypes = ['All', 'Not Completed', 'Completed'] as const
 const todosToShow = computed<TodoModel[]>(() => {
   const selected = todoTypes[selectedTodoType.value]
 

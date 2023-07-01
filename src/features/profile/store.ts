@@ -67,12 +67,11 @@ export const useUserStore = defineStore('user', {
       }
     },
 
-
-		// Reset
-		reset() {
-			this.userApiStatus = IApiRequestStatus.Default
-			this.userApiMsg = ''
-			this.user = null
-		}
+    // Reset
+    reset() {
+      this.userApiStatus = IApiRequestStatus.Default
+      this.userApiMsg = ''
+      this.user = null
+    },
   },
 })

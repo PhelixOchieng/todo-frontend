@@ -23,6 +23,4 @@ import { useAuthStore } from '../../auth/store'
 
 const store = useAuthStore()
 const { isUserAuthed } = storeToRefs(store)
-
-
 </script>

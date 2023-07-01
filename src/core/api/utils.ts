@@ -36,7 +36,7 @@ export function parseParams(params: any) {
 }
 
 export function getErrorMessage(err: any, message = 'An error occured. Please try again later.') {
-	let msg = message;
+  let msg = message
   const errCode = (err as AxiosError).code
   if (errCode && ['ERR_NETWORK', 'ECONNABORTED'].includes(errCode))
     msg =
@@ -44,7 +44,7 @@ export function getErrorMessage(err: any, message = 'An error occured. Please tr
 
   const resp: IApiResponse = (err as any).response
   if (resp) msg = resp.data.message ?? message
-	
-	if (msg === message) console.error(err);
+
+  if (msg === message) console.error(err)
   return msg
 }

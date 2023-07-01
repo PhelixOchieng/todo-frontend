@@ -4,7 +4,7 @@ import type {
   ISignupApiResponse,
   ILoginApiResponse,
   ILoginPayload,
-  ISignupPayload
+  ISignupPayload,
 } from './interface'
 
 export const authService = {
@@ -12,7 +12,7 @@ export const authService = {
     return new Promise<ILoginApiResponse>((resolve, reject) => {
       api.post('auth/login/', payload, {
         onSuccess: resolve,
-        onError: reject
+        onError: reject,
       })
     })
   },
@@ -21,8 +21,8 @@ export const authService = {
     return new Promise<ISignupApiResponse>((resolve, reject) => {
       api.post('auth/signup/', payload, {
         onSuccess: resolve,
-        onError: reject
+        onError: reject,
       })
     })
-  }
+  },
 }

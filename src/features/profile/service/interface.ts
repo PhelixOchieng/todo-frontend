@@ -1,4 +1,4 @@
-import type { IApiResponse }from '@/core/api'
+import type { IApiResponse } from '@/core/api'
 
 import type { IUserJson } from '../models/user.interface'
 

@@ -157,7 +157,7 @@ let filteredOptions = computed<IAutocompleteOption[]>(() => {
         option.value
           .toLowerCase()
           .replace(/\s+/g, '')
-          .includes(query.value.toLowerCase().replace(/\s+/g, ''))
+          .includes(query.value.toLowerCase().replace(/\s+/g, '')),
       )
 })
 

@@ -1,14 +1,26 @@
 <template>
   <div
-    :class="twMerge(
+    :class="[
+			twMerge(
             'group block rounded-md border border-slate-200 bg-container px-6 py-3',
             'shadow transition-[box-shadow,transform] duration-300',
             'hover:scale-105 hover:shadow-md',
 						$attrs.class as string,
-          )"
+          ),
+				todo.isCompleted ? 'opacity-80 hover:opacity-100' : 'opacity-100'
+		]"
   >
-    <div class="flex items-center justify-between">
-      <p class="text-lg font-medium">{{ todo.title }}</p>
+    <div class="flex items-center justify-between gap-x-4">
+      <div class="relative overflow-hidden">
+        <p class="truncate text-lg font-medium">{{ todo.title }}</p>
+        <div
+          aria-role="none"
+          :class="[
+            'absolute left-0 top-1/2 h-[1px] w-full -translate-y-1/2 rounded bg-light transition-transform duration-300 dark:bg-dark',
+            todo.isCompleted ? 'origin-left scale-x-100' : 'origin-right scale-x-0',
+          ]"
+        />
+      </div>
       <div class="flex items-center gap-x-1">
         <button
           :class="[
@@ -78,11 +90,13 @@
       <CalendarDaysIcon class="h-4 w-4" />
       <p class="text-xs">Created: {{ parseDate(todo.createdAt) }}</p>
     </div>
+
+    <Snackbar v-model="isSnackbarOpen" type="error" :msg="apiMsg" :timeout="0" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { type FunctionalComponent, computed } from 'vue'
+import { type FunctionalComponent, ref } from 'vue'
 import { twMerge } from 'tailwind-merge'
 import { differenceInDays, differenceInMonths, format, formatRelative } from 'date-fns'
 import { EllipsisVerticalIcon, XMarkIcon } from '@heroicons/vue/20/solid'
@@ -99,7 +113,7 @@ import {
   PencilIcon as UpdateSolidIcon,
 } from '@heroicons/vue/24/solid'
 
-import { DropdownButton } from '@/features/common/components'
+import { DropdownButton, Snackbar } from '@/features/common/components'
 
 import TodoModel from '../models/todo.model'
 import type { TTodoUpdatePayload } from '../services'
@@ -116,6 +130,7 @@ const {
 const apiHandle = useApiHandle(apiStatus)
 
 const props = defineProps<{ todo: TodoModel }>()
+const isSnackbarOpen = ref(false)
 
 interface ITodoAction {
   name: string

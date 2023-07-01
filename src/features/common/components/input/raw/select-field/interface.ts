@@ -1,11 +1,11 @@
 export interface ISelectOption<T> {
-	key: T,
-	value: string,
+  key: T
+  value: string
 }
 
 export interface IProps<T> {
-	modelValue: T;
-	options?: ISelectOption<T>[] | undefined | null
+  modelValue: T
+  options?: ISelectOption<T>[] | undefined | null
   id?: string
   name?: string
   label?: string

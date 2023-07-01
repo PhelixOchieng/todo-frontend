@@ -54,11 +54,11 @@ const props = withDefaults(
     currentIndex: number
     images: { src: string; alt?: string }[]
     buttons?: boolean
-		interval?: number
+    interval?: number
   }>(),
   {
     buttons: true,
-		interval: 15000,
+    interval: 15000,
   },
 )
 

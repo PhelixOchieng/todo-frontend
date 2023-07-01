@@ -2,7 +2,7 @@
   <div class="px-3 pt-4">
     <div class="flex items-center justify-between">
       <h1 class="mb-4">My Profile</h1>
-			<UpdateProfile v-if="user" :user="user" />
+      <UpdateProfile v-if="user" :user="user" />
     </div>
     <Status v-if="apiHandle.isError.value" variant="error" @retry="getProfile">{{ apiMsg }}</Status>
     <section v-if="user" class="flex gap-x-6">

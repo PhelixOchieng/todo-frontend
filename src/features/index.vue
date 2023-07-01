@@ -1,5 +1,5 @@
 <template>
-	<TopNav />
+  <TopNav />
   <RouterView class="pb-8" />
 </template>
 

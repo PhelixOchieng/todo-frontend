@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Property Now</title>
   </head>
   <body>
     <div id="app"></div>
+    <div class="pointer-events-none fixed inset-0 z-[999999999]">
+      <div id="snackbars" class="flex flex-col-reverse p-3 h-full gap-y-1 justify-start items-center" />
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

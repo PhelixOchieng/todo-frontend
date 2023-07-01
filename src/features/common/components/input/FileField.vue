@@ -14,11 +14,8 @@
       class="group grid cursor-pointer place-items-center rounded-lg border border-dashed border-slate-200 p-2 transition-all duration-200 hover:border-primary"
     >
       <div v-if="images.length" :class="twMerge('h-full w-full', imagesClass)">
-        <div v-for="(image, i) of images" :key="`image-${i}`" class="relative w-full h-full">
-          <img
-            :src="image.src"
-            :class="['rounded object-cover h-full w-full']"
-          />
+        <div v-for="(image, i) of images" :key="`image-${i}`" class="relative h-full w-full">
+          <img :src="image.src" :class="['h-full w-full rounded object-cover']" />
           <button
             class="absolute bottom-1 left-1 rounded-full border border-slate-100 bg-white/70 p-2 backdrop-blur [&>.icon]:hover:-rotate-180"
             @click.prevent.stop="removeImageAtIdx(i)"
@@ -40,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref} from 'vue'
+import { ref } from 'vue'
 import { twMerge } from 'tailwind-merge'
 import { PhotoIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 
@@ -49,12 +46,12 @@ export interface IProps {
   label?: string
   multiple?: boolean
   accept?: string
-	imagesClass?: string
+  imagesClass?: string
 }
 
 withDefaults(defineProps<IProps>(), {
   multiple: false,
-	imagesClass: '',
+  imagesClass: '',
 })
 const emit = defineEmits<{
   (evt: 'input', files: File[]): void

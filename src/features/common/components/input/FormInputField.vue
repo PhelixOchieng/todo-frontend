@@ -11,7 +11,14 @@
       :min="min"
       :max="max"
       :disabled="disabled"
-    />
+    >
+      <template #label>
+        <label v-if="label" class="flex gap-x-1" :for="inputID">
+          {{ label }}
+          <span v-if="required" class="text-red-500">*</span>
+        </label>
+      </template>
+    </InputField>
     <div v-if="field.errors" class="mt-1 text-sm text-red-500">
       <span v-for="(error, i) of field.errors.value" :key="`error-${i}`" class="block">
         {{ error }}
@@ -38,18 +45,12 @@ export interface IProps {
   min?: string
   max?: string
   disabled?: boolean
+  required?: boolean
 }
 
 const props = withDefaults(defineProps<IProps>(), {
   type: 'text',
-  id: undefined,
-  name: undefined,
-  label: undefined,
-  placeholder: '',
-  errors: '',
   autocomplete: 'off',
-  validateOnKeypress: false,
-  disabled: false,
 })
 
 const value = props.field.value as Ref<string | number | null>

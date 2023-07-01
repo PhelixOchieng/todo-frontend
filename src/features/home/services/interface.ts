@@ -12,4 +12,10 @@ export type TTodosApiResponse = IApiResponse<ITodoJson[]>
 export type TTodoApiResponse = IApiResponse<ITodoJson>
 
 export type TTodoUpdatePayload = Partial<Exclude<ITodoJson, 'id' | 'createdAt' | 'updatedAt'>>
-export type TTodoUpdateApiResponse = TTodoApiResponse;
+export type TTodoUpdateApiResponse = TTodoApiResponse
+
+export type TTodoAddPayload = {
+  title: string
+  description: string | null
+}
+export type TTodoAddApiResponse = IApiResponse<ITodoJson>

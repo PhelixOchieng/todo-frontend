@@ -7,8 +7,10 @@
       </button>
     </template>
     <template #default="{ closeModal }">
-			<p class="mb-6 text-xl text-center">Update Profile</p>
-			<Status v-if="apiHandle.isError.value" variant="error" :should-retry="false">{{ apiMsg }}</Status>
+      <p class="mb-6 text-center text-xl">Update Profile</p>
+      <Status v-if="apiHandle.isError.value" variant="error" :should-retry="false">{{
+        apiMsg
+      }}</Status>
       <form class="space-y-2" @submit.prevent="() => update(closeModal)">
         <div class="flex gap-x-4">
           <FormInputField label="First Name" :field="firstName" />
@@ -51,7 +53,7 @@ import { useUserStore } from '../store'
 const props = defineProps<{ user: UserModel }>()
 
 const store = useUserStore()
-const { userUpdateApiStatus: apiStatus, userUpdateApiMsg: apiMsg  } = storeToRefs(store)
+const { userUpdateApiStatus: apiStatus, userUpdateApiMsg: apiMsg } = storeToRefs(store)
 const apiHandle = useApiHandle(apiStatus)
 
 const form = new Form({

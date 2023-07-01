@@ -11,7 +11,7 @@
       <p class="title">Error</p>
       <p class="capitalize">{{ apiMsg }}</p>
     </div>
-    <section v-if="todo" class="mt-2 md:mt-4 gap-x-4 md:flex">
+    <section v-if="todo" class="mt-2 gap-x-4 md:mt-4 md:flex">
       <Slideshow
         v-model:currentIndex="currentImageIdx"
         class="md:w-max-[400px] aspect-square flex-1 rounded-lg"
@@ -83,7 +83,7 @@ const route = useRoute()
 gettodo()
 function gettodo() {
   const id = route.params.id as string
-  store.getTodo(id);
+  store.getTodo(id)
 }
 
 function gotoImageIdx(idx: number) {
