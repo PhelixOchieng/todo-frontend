@@ -73,7 +73,12 @@
                 'flex w-full items-center gap-x-3 rounded-md px-2 py-2 text-sm',
                 { 'bg-primary text-white': active },
               ]"
-              @click.stop.prevent="() => close() && item.onSelect(item)"
+              @click.stop.prevent="
+                () => {
+                  close()
+                  item.onSelect()
+                }
+              "
             >
               <component
                 :is="active ? item.solidIcon : item.outlineIcon"
@@ -93,11 +98,28 @@
     </div>
 
     <Snackbar v-model="isSnackbarOpen" type="error" :msg="apiMsg" :timeout="0" />
+    <Modal v-model="isUpdateModalOpen" show-title :use-internal-state="false">
+      <template #title>
+        <h2 class="text-center">Update Todo</h2>
+      </template>
+      <template #default="{ closeModal }">
+        <UpdateTodo :todo="todo" @close-modal="closeModal" />
+      </template>
+    </Modal>
+    <Modal v-model="isDeleteModalOpen" show-title :use-internal-state="false">
+      <template #title>
+        <h2 class="text-center">Delete Todo</h2>
+      </template>
+      <template #default="{ closeModal }">
+        <DeleteTodo :todo="todo" @close-modal="closeModal" />
+      </template>
+    </Modal>
   </div>
 </template>
 
 <script setup lang="ts">
 import { type FunctionalComponent, ref } from 'vue'
+import { storeToRefs } from 'pinia'
 import { twMerge } from 'tailwind-merge'
 import { differenceInDays, differenceInMonths, format, formatRelative } from 'date-fns'
 import { EllipsisVerticalIcon, XMarkIcon } from '@heroicons/vue/20/solid'
@@ -114,13 +136,14 @@ import {
   PencilIcon as UpdateSolidIcon,
 } from '@heroicons/vue/24/solid'
 
-import { DropdownButton, Snackbar } from '@/features/common/components'
+import { useApiHandle } from '@/core/api/composables'
+import { DropdownButton, Modal, Snackbar } from '@/features/common/components'
 
 import TodoModel from '../models/todo.model'
 import type { TTodoUpdatePayload } from '../services'
 import { useTodosStore } from '../store'
-import { storeToRefs } from 'pinia'
-import { useApiHandle } from '@/core/api/composables'
+import UpdateTodo from '../components/UpdateTodo.vue'
+import DeleteTodo from '../components/DeleteTodo.vue'
 
 const store = useTodosStore()
 const {
@@ -132,13 +155,15 @@ const apiHandle = useApiHandle(apiStatus)
 
 const props = defineProps<{ todo: TodoModel }>()
 const isSnackbarOpen = ref(false)
+const isUpdateModalOpen = ref(false)
+const isDeleteModalOpen = ref(false)
 
 interface ITodoAction {
   name: string
   key: string
   outlineIcon: FunctionalComponent
   solidIcon: FunctionalComponent
-  onSelect: (todo: TodoModel) => void
+  onSelect: () => void
 }
 const todoActions: ITodoAction[] = [
   {
@@ -146,18 +171,14 @@ const todoActions: ITodoAction[] = [
     name: 'Edit',
     outlineIcon: UpdateOutlineIcon,
     solidIcon: UpdateSolidIcon,
-    onSelect(todo) {
-      console.log('Selected', todo)
-    },
+    onSelect: () => (isUpdateModalOpen.value = true),
   },
   {
     key: 'deleteTodo',
     name: 'Delete',
     outlineIcon: TrashOutlineIcon,
     solidIcon: TrashSolidIcon,
-    onSelect(todo) {
-      console.log('Selected', todo)
-    },
+    onSelect: () => (isDeleteModalOpen.value = true),
   },
 ]
 

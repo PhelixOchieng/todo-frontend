@@ -12,11 +12,11 @@
       <h2 class="overflow-hidden text-clip whitespace-nowrap text-center">Add Todo</h2>
     </template>
     <template #default="{ closeModal }">
-      <Status v-if="apiHandle.isError.value" variant="error" :should-retry="false">{{
-        apiMsg
-      }}</Status>
+      <Status v-if="apiHandle.isError.value" variant="error" :should-retry="false">
+        {{ apiMsg }}
+      </Status>
       <form class="space-y-3" @submit.prevent="() => addTodo(closeModal)">
-        <FormInputField :field="title" label="Title" required />
+        <FormInputField :field="title" label="Title" />
         <FormTextField :field="description" label="Description" />
 
         <div class="!mt-4 flex justify-center gap-x-2">

@@ -8,6 +8,7 @@ import type {
   TTodoUpdatePayload,
   TTodoAddPayload,
   TTodoAddApiResponse,
+TTodoDeleteApiResponse,
 } from './interface'
 
 const basePath = 'todos'
@@ -39,4 +40,12 @@ export const todosService = {
       })
     })
   },
+	deleteOne(id: string) {
+		return new Promise<TTodoDeleteApiResponse>((resolve, reject) => {
+			api.delete(`${basePath}/${id}/`, {
+				onSuccess: resolve,
+				onError: reject,
+			})
+		})
+	}
 }

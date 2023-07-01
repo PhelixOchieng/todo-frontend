@@ -48,20 +48,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, useSlots } from 'vue'
+import { computed, ref } from 'vue'
 import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from '@headlessui/vue'
 
-const isOpen = ref(false)
-defineProps<{ showTitle?: boolean }>()
-const emit = defineEmits<{ close: [] }>()
+const props = withDefaults(defineProps<{ modelValue?: boolean; useInternalState?: boolean, showTitle?: boolean }>(), { useInternalState: true })
+const emit = defineEmits<{ 'update:modelValue': [value: boolean]; close: [] }>()
+
+const isOpenInternal = ref(false)
+const isOpen = computed<boolean>(() => props.useInternalState ? isOpenInternal.value : props.modelValue);
 
 function closeModal() {
-  isOpen.value = false
+	isOpenInternal.value = true
+	emit('update:modelValue', false)
   emit('close')
 }
 function openModal() {
-  isOpen.value = true
+	isOpenInternal.value = true
+	emit('update:modelValue', true)
 }
-
-const slots = useSlots()
 </script>

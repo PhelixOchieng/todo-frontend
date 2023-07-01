@@ -4,7 +4,7 @@ export const Validators = {
   required(v, msg) {
     return !!v || msg || 'This field is required'
   },
-  email(v: string, msg) {
+  email(v, msg) {
     return /^(\w+\.?)+@\w+\.\w{2,}$/.test(v) || msg || 'Email is invalid'
   },
 } satisfies { [name: string]: TValidatorFn<any> }

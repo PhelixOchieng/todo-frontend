@@ -3,19 +3,19 @@ import {
   IFormFieldState,
   type IFormField,
   type TValidatorFn,
-  type TValidators,
+  type TValidator,
 } from './forms.interface'
 
 export class FormField<T = any> implements IFormField<T> {
   private _initialValue: T | null
   public value: IFormField<T>['value']
-  public validators?: TValidators
+  public validators?: TValidator[]
 
   public state = ref(IFormFieldState.Valid)
 
   errors: IFormField<T>['errors']
 
-  constructor(value: T | null, validators?: TValidators) {
+  constructor(value: T | null, validators?: TValidator[]) {
     this._initialValue = value
     this.value = ref(value)
     this.validators = validators
@@ -53,6 +53,10 @@ export class FormField<T = any> implements IFormField<T> {
     this.value = ref(this._initialValue)
     this.errors.value = []
   }
+
+	hasValidator(validator: TValidator): boolean {
+		return this.validators?.includes(validator) ?? false;
+	}
 
   onInputChange(callback: (value: UnwrapRef<T | null>) => void): FormField {
     watch(this.value, (v) => callback(v))

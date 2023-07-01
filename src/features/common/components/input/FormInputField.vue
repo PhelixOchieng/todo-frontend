@@ -15,7 +15,7 @@
       <template #label>
         <label v-if="label" class="flex gap-x-1" :for="inputID">
           {{ label }}
-          <span v-if="required" class="text-red-500">*</span>
+          <span v-if="field.hasValidator(Validators.required)" class="text-red-500">*</span>
         </label>
       </template>
     </InputField>
@@ -30,6 +30,7 @@
 <script setup lang="ts">
 import { computed, watch, type Ref } from 'vue'
 import type { FormField } from '@/core/forms'
+import { Validators } from '@/core/forms/validators'
 
 import { InputField } from './raw'
 
@@ -45,7 +46,6 @@ export interface IProps {
   min?: string
   max?: string
   disabled?: boolean
-  required?: boolean
 }
 
 const props = withDefaults(defineProps<IProps>(), {

@@ -6,11 +6,14 @@ export function parseTime(date: Date): string {
   return formatRelative(date, new Date())
 }
 
-export async function delay(timeout: number, callback?: () => void): Promise<void> {
-  return new Promise((res) =>
-    setTimeout(() => {
+export async function delay(
+  timeout: number,
+  callback?: () => Promise<void> | void,
+): Promise<void> {
+  return new Promise((res) => {
+    setTimeout(async () => {
+      if (callback) await callback()
       res()
-      if (callback) callback()
-    }, timeout),
-  )
+    }, timeout)
+  })
 }

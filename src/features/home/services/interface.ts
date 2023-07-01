@@ -1,5 +1,6 @@
 import type { IApiResponse } from '@/core/api'
 
+import type { PartialNull } from '@/features/common/interface'
 import type { ITodoJson } from '../models/todo.interface'
 
 export interface ITodosParams {
@@ -11,7 +12,7 @@ export interface ITodosParams {
 export type TTodosApiResponse = IApiResponse<ITodoJson[]>
 export type TTodoApiResponse = IApiResponse<ITodoJson>
 
-export type TTodoUpdatePayload = Partial<Exclude<ITodoJson, 'id' | 'createdAt' | 'updatedAt'>>
+export type TTodoUpdatePayload = PartialNull<Omit<ITodoJson, 'id' | 'createdAt' | 'updatedAt'>>
 export type TTodoUpdateApiResponse = TTodoApiResponse
 
 export type TTodoAddPayload = {
@@ -19,3 +20,5 @@ export type TTodoAddPayload = {
   description: string | null
 }
 export type TTodoAddApiResponse = IApiResponse<ITodoJson>
+
+export type TTodoDeleteApiResponse = 

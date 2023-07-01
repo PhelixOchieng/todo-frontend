@@ -12,8 +12,8 @@ const config = {
 					dark: colors.violet[700],
         },
         'on-primary': {
-          DEFAULT: '#000',
-          dark: '#000',
+          DEFAULT: '#fff',
+          dark: '#fff',
         },
         secondary: {
 					DEFAULT: colors.orange[500],

@@ -23,6 +23,9 @@ interface IState {
 
   todoAddApiStatus: IApiRequestStatus
   todoAddApiMsg: string
+
+  todoDeleteApiStatus: IApiRequestStatus
+  todoDeleteApiMsg: string
 }
 
 const state = (): IState => ({
@@ -40,6 +43,9 @@ const state = (): IState => ({
 
   todoAddApiStatus: IApiRequestStatus.Default,
   todoAddApiMsg: '',
+
+  todoDeleteApiStatus: IApiRequestStatus.Default,
+  todoDeleteApiMsg: '',
 })
 
 export const useTodosStore = defineStore('todosStore', {
@@ -112,7 +118,7 @@ export const useTodosStore = defineStore('todosStore', {
         const data = response.data.data
         const todo = TodoModel.fromJson(data)
         // Just delay for the add in animations 😉
-        delay(500, () => this.todos!.unshift(todo))
+        delay(500, () => void this.todos!.unshift(todo))
 
         this.todoAddApiStatus = IApiRequestStatus.Success
       } catch (e) {
@@ -120,6 +126,24 @@ export const useTodosStore = defineStore('todosStore', {
 
         const message = getErrorMessage(e)
         this.todoAddApiMsg = message
+      }
+    },
+    async deleteTodo(id: string) {
+      try {
+        this.todoDeleteApiStatus = IApiRequestStatus.Loading
+        this.todoDeleteApiMsg = ''
+
+        await todosService.deleteOne(id)
+        const idx = this.todos!.findIndex((t) => t.id.toString() === id)
+        // Just delay for the add in animations 😉
+        if (idx > -1) delay(500, () => void this.todos!.splice(idx, 1))
+
+        this.todoDeleteApiStatus = IApiRequestStatus.Success
+      } catch (e) {
+        this.todoDeleteApiStatus = IApiRequestStatus.Error
+
+        const message = getErrorMessage(e)
+        this.todoDeleteApiMsg = message
       }
     },
   },

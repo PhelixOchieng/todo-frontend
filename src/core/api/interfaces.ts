@@ -19,10 +19,10 @@ export interface IApiRequestParams {
   [propName: string]: any
 }
 
-export interface IApiResponse<T = unknown> extends AxiosResponse {
+export interface IApiResponse<T> extends AxiosResponse {
   data: {
     error: boolean
     message?: string
-    data: T
+    data: T extends null ? never : T
   }
 }
