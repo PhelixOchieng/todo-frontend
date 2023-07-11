@@ -1,12 +1,12 @@
 import axios, { AxiosError, type AxiosResponse } from 'axios'
-import type { AxiosRequestConfig } from 'axios'
+import type { InternalAxiosRequestConfig } from 'axios'
 
 import { TokenCategory } from '@/common/constants'
 import { retrieveAuthToken } from '@/common/functional'
 
-type TRequestInterceptorResponse = AxiosRequestConfig | Promise<AxiosRequestConfig>
+type TRequestInterceptorResponse = InternalAxiosRequestConfig | Promise<InternalAxiosRequestConfig>
 
-export function authInterceptor(config: AxiosRequestConfig): TRequestInterceptorResponse {
+export function authInterceptor(config: InternalAxiosRequestConfig): TRequestInterceptorResponse {
   const accessToken = retrieveAuthToken(TokenCategory.Access)
   if (accessToken && config.headers) {
     config.headers.Authorization = `Bearer ${accessToken}`
@@ -27,7 +27,7 @@ function logObject(title: string, obj?: Record<string, any>): void {
 }
 
 const isDevMode = import.meta.env.MODE === 'development'
-export function requestLoggerInterceptor(config: AxiosRequestConfig): TRequestInterceptorResponse {
+export function requestLoggerInterceptor(config: InternalAxiosRequestConfig): TRequestInterceptorResponse {
   if (isDevMode) {
     console.groupCollapsed(`Request  (${config.method?.toUpperCase()}):`, config.url)
 

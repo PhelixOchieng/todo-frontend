@@ -16,6 +16,7 @@ class ApiHandle implements IApiHandle {
     this.status = apiStatus
   }
 
+  isDefault = computed<boolean>(() => this.status.value === IApiRequestStatus.Default)
   isLoading = computed<boolean>(() => this.status.value === IApiRequestStatus.Loading)
   isSuccess = computed<boolean>(() => this.status.value === IApiRequestStatus.Success)
   isError = computed<boolean>(() => this.status.value === IApiRequestStatus.Error)

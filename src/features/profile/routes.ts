@@ -3,9 +3,9 @@ import type { RouteRecordRaw } from 'vue-router'
 import IndexView from './index.vue'
 import ProfileView from './pages/profile.vue'
 
-export const userRoutes: RouteRecordRaw[] = [
+export const profileRoutes: RouteRecordRaw[] = [
   {
-    path: 'profile',
+    path: '/profile',
     component: IndexView,
     children: [
       {

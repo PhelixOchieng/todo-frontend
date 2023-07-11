@@ -1,26 +1,25 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import { isAuthTokenValid, isTokenValidForAdmin } from '@/common/functional/authToken'
+import { isAuthTokenValid, isTokenValidForAdmin } from '@/common/functional'
 
+import { authRoutes } from '@/features/auth/routes'
 import { homeRoutes } from '@/features/home/routes'
+import { profileRoutes } from '@/features/profile/routes'
 import { errorsRoutes } from '@/features/errors/routes'
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes: [
-    ...homeRoutes,
-
-    // Must always be last
-    ...errorsRoutes,
-  ],
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [...authRoutes, ...homeRoutes, ...profileRoutes, ...errorsRoutes],
 })
 
 router.beforeEach((to) => {
-  const isAdminRoute = (to.name as string | undefined)?.includes('admin-')
-  if (!isAdminRoute) return
+  const routeRequiresAuth = !to.meta.noAuth
+  console.log(to, to.meta.noAuth, routeRequiresAuth)
+  if (!routeRequiresAuth) return
 
   const isLoggedIn = isAuthTokenValid()
-  if (!isLoggedIn) return { name: 'auth', query: { to: to.path } }
+	console.log('Needs to be logged in:', isLoggedIn)
+  if (!isLoggedIn) return { name: 'login', query: { to: to.path !== '/' ? to.path : undefined } }
 
   const isUserAdmin = isTokenValidForAdmin()
   if (isUserAdmin) return

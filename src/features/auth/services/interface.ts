@@ -1,19 +1,19 @@
-import type { IApiResponse } from '@/core/api'
+import type { IApiResponse } from "@/core/api";
 
 export interface ILoginPayload {
-  email: string
-  password: string
+	email: string;
+	password: string;
 }
+export type TLoginApiResponse = IApiResponse<{accessToken: string, refreshToken: string}>;
 
-export interface ILoginApiResponse extends IApiResponse {
-  data: { access_token: string }
+export interface IEmailVerificationPayload {
+	email: string;
 }
+export type TEmailVerificationApiResponse = IApiResponse<never>;
 
-export interface ISignupPayload {
-  first_name: string
-  last_name: string
-  email: string
-  password: string
+export interface IPasswordResetPayload {
+	token: string;
+	password: string;
 }
+export type TPasswordResetApiResponse = IApiResponse<never>;
 
-export interface ISignupApiResponse extends IApiResponse {}

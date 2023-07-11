@@ -1,7 +1,7 @@
 <template>
   <div>
     <slot name="label">
-      <label v-if="label" :for="id">{{ label }}</label>
+      <label v-if="label" :for="id" class="mb-1">{{ label }}</label>
     </slot>
     <div class="relative">
       <input

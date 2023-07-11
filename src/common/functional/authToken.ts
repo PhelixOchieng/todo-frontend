@@ -5,12 +5,9 @@ interface IAuthToken {
   refreshToken: string
 }
 
-export function saveAuthToken(token: string): void {
-  localStorage.setItem(TokenCategory.Access, token)
-}
-
-export function setNewAccessToken(token: IAuthToken['accessToken']): void {
-  localStorage.setItem(TokenCategory.Access, token)
+export function saveAuthToken(token: IAuthToken): void {
+  localStorage.setItem(TokenCategory.Access, token.accessToken)
+  localStorage.setItem(TokenCategory.Refresh, token.refreshToken)
 }
 
 export function retrieveAuthToken(category: TokenCategory): string | null {
@@ -21,25 +18,21 @@ export function retrieveAuthToken(category: TokenCategory): string | null {
   }
 }
 
-export function removeAuthToken(category: TokenCategory): void {
-  if (category === TokenCategory.Access) {
-    localStorage.removeItem(TokenCategory.Access)
-  } else {
-    localStorage.removeItem(TokenCategory.Refresh)
-  }
+export function removeAuthToken(): void {
+	localStorage.removeItem(TokenCategory.Access)
+	localStorage.removeItem(TokenCategory.Refresh)
 }
 
 export function getUserID(category = TokenCategory.Access): string | null {
   const token = retrieveAuthToken(category)
   if (!token) return null
 
-  return JSON.parse(atob(token.split('.')[1])).sub.id
+  return JSON.parse(atob(token.split('.')[1])).userID;
 }
 
 export function isAuthTokenValid(offset = 0, token?: string): boolean {
   const authToken = token ?? retrieveAuthToken(TokenCategory.Access)
   if (!authToken) return false
-  return true
 
   const expiry = JSON.parse(atob(authToken.split('.')[1])).exp * 1000
   const expiryDate = new Date(expiry - offset)
@@ -50,7 +43,7 @@ export function isAuthTokenValid(offset = 0, token?: string): boolean {
 
 export function isTokenForAdmin(token?: string): boolean {
   const authToken = token ?? retrieveAuthToken(TokenCategory.Access)!
-  const isAdmin = JSON.parse(atob(authToken.split('.')[1])).sub.account_type == 'admin'
+  const isAdmin = JSON.parse(atob(authToken.split('.')[1])).role === 'admin'
   return isAdmin
 }
 

@@ -1,29 +1,36 @@
-import { defineStore } from 'pinia'
-
 import { IApiRequestStatus } from '@/core/api'
-import { getErrorMessage } from '@/core/api/utils'
-import { isAuthTokenValid, removeAuthToken, saveAuthToken } from '@/common/functional'
-import { TokenCategory } from '@/common/constants'
-
-import { authService, type ILoginPayload, type ISignupPayload } from './services'
-import { useUserStore } from '../user/store'
+import { defineStore } from 'pinia'
+import type {
+  IEmailVerificationPayload,
+  ILoginPayload,
+  IPasswordResetPayload,
+} from './services/interface'
+import { authService } from './services/service'
+import { isTokenValidForAdmin, saveAuthToken } from '@/common/functional'
+import { getErrorMessage } from '@/common/functional/errors'
 
 interface IState {
   loginApiStatus: IApiRequestStatus
   loginApiMsg: string
-  isUserAuthed: boolean
 
-  signupApiStatus: IApiRequestStatus
-  signupApiMsg: string
+  emailVerificationApiStatus: IApiRequestStatus
+  emailVerificationApiMsg: string
+  verifiedEmail: string | null
+
+  passwordResetApiStatus: IApiRequestStatus
+  passwordResetApiMsg: string
 }
 
 const state = (): IState => ({
   loginApiStatus: IApiRequestStatus.Default,
   loginApiMsg: '',
-  isUserAuthed: isAuthTokenValid(),
 
-  signupApiStatus: IApiRequestStatus.Default,
-  signupApiMsg: '',
+  emailVerificationApiStatus: IApiRequestStatus.Default,
+  emailVerificationApiMsg: '',
+  verifiedEmail: null,
+
+  passwordResetApiStatus: IApiRequestStatus.Default,
+  passwordResetApiMsg: '',
 })
 
 export const useAuthStore = defineStore('auth-store', {
@@ -31,50 +38,61 @@ export const useAuthStore = defineStore('auth-store', {
   actions: {
     async login(payload: ILoginPayload) {
       try {
-        this.loginApiMsg = ''
         this.loginApiStatus = IApiRequestStatus.Loading
+        this.loginApiMsg = ''
 
         const response = await authService.login(payload)
-        const accessToken = response.data.access_token
+        const tokens = response.data.data
+        saveAuthToken(tokens)
 
-        saveAuthToken(accessToken)
-        this.isUserAuthed = true
+        this.verifiedEmail = null
         this.loginApiStatus = IApiRequestStatus.Success
       } catch (e) {
         this.loginApiStatus = IApiRequestStatus.Error
 
-        const message = getErrorMessage(e, 'An error occured while logging in.')
+        const message = getErrorMessage(e)
         this.loginApiMsg = message
       }
     },
 
-    async signup(payload: ISignupPayload) {
+    async verifyEmail(payload: IEmailVerificationPayload) {
       try {
-        this.signupApiMsg = ''
-        this.signupApiStatus = IApiRequestStatus.Loading
+        this.emailVerificationApiStatus = IApiRequestStatus.Loading
+        this.emailVerificationApiMsg = ''
 
-        await authService.signup(payload)
+        await authService.validateEmail(payload)
 
-        this.signupApiStatus = IApiRequestStatus.Success
+        this.verifiedEmail = payload.email
+        this.emailVerificationApiStatus = IApiRequestStatus.Success
       } catch (e) {
-        this.signupApiStatus = IApiRequestStatus.Error
+        this.emailVerificationApiStatus = IApiRequestStatus.Error
 
-        const message = getErrorMessage(e, 'An error occured while signing up')
-        this.signupApiMsg = message
+        const message = getErrorMessage(e)
+        this.emailVerificationApiMsg = message
       }
     },
+    async resendToken() {
+      this.passwordResetApiStatus = IApiRequestStatus.Default
+      this.passwordResetApiMsg = ''
 
-    logout() {
-      this.loginApiStatus = IApiRequestStatus.Default
-      this.loginApiMsg = ''
-      this.signupApiStatus = IApiRequestStatus.Default
-      this.signupApiMsg = ''
+      await this.verifyEmail({
+        email: this.verifiedEmail!,
+      })
+    },
+    async resetPassword(payload: IPasswordResetPayload) {
+      try {
+        this.passwordResetApiStatus = IApiRequestStatus.Loading
+        this.passwordResetApiMsg = ''
 
-      const userStore = useUserStore()
-      userStore.reset()
+        await authService.resetPassword(payload)
 
-      removeAuthToken(TokenCategory.Access)
-      this.isUserAuthed = false
+        this.passwordResetApiStatus = IApiRequestStatus.Success
+      } catch (e) {
+        this.passwordResetApiStatus = IApiRequestStatus.Error
+
+        const message = getErrorMessage(e)
+        this.passwordResetApiMsg = message
+      }
     },
   },
 })
