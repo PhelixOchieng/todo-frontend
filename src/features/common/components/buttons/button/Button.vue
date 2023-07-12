@@ -6,7 +6,7 @@
     <slot />
     <div
       :class="[
-        'absolute left-1/2 top-1/2 aspect-square h-3/5 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-[inherit]',
+        'absolute pointer-events-none left-1/2 top-1/2 aspect-square h-3/5 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-[inherit]',
         loading ? 'opacity-100' : 'opacity-0',
       ]"
       aria-role="none"

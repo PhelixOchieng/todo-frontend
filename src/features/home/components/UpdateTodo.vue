@@ -3,19 +3,19 @@
     {{ apiMsg }}
   </Status>
   <form class="space-y-3" @submit.prevent="addTodo">
-		<FormInputField :field="title" label="Title" />
+    <FormInputField :field="title" label="Title" />
     <FormTextField :field="description" label="Description" />
-		<Switch v-model="isCompleted">Is Completed</Switch>
+    <Switch v-model="isCompleted">Is Completed</Switch>
     <div class="!mt-8 flex justify-center gap-x-2">
-      <button
+      <Button
+				variant="text"
         type="button"
-        class="btn-text rounded-md"
         :disabled="apiHandle.isLoading.value"
         @click="closeModal"
       >
         Cancel
-      </button>
-      <button type="submit" :class="['btn', { loading: apiHandle.isLoading.value }]">Update</button>
+      </Button>
+      <Button type="submit" :loading="apiHandle.isLoading.value">Update</Button>
     </div>
   </form>
 </template>
@@ -27,7 +27,7 @@ import { storeToRefs } from 'pinia'
 import { Form, FormField } from '@/core/forms'
 import { Validators } from '@/core/forms/validators'
 import { useApiHandle } from '@/core/api/composables'
-import { FormInputField, FormTextField, Status, Switch } from '@/features/common/components'
+import { Button, FormInputField, FormTextField, Status, Switch } from '@/features/common/components'
 
 import { useTodosStore } from '../store'
 import type { TTodoUpdatePayload } from '../services'
@@ -69,4 +69,3 @@ function closeModal() {
 const title = computed(() => form.getField<string>('title')!)
 const description = computed(() => form.getField<string | null>('description')!)
 </script>
-

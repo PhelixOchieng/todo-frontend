@@ -1,15 +1,15 @@
 <template>
   <HeroModal :show-title="true" @close="handleModalClose">
     <template #trigger="{ openModal }">
-      <button
+      <Button
         :class="[
-          'btn max-sm:fixed left-1/2 aspect-square -translate-x-1/2 rounded-xl max-md:bottom-8',
-          'md:right-10 md:top-20 md:translate-x-0',
+          'left-1/2 aspect-square -translate-x-1/2 rounded-xl p-3 max-md:bottom-8 max-sm:fixed',
+          'md:left-0 md:right-10 md:top-0 md:translate-x-0',
         ]"
         @click="openModal"
       >
         <PlusIcon class="h-5 w-5" />
-      </button>
+      </Button>
     </template>
     <template #title>
       <h2 class="overflow-hidden text-clip whitespace-nowrap text-center">Add Todo</h2>
@@ -23,17 +23,15 @@
         <FormTextField :field="description" label="Description" />
 
         <div class="!mt-4 flex justify-center gap-x-2">
-          <button
+          <Button
+            variant="text"
             type="button"
-            class="btn-text rounded-md"
             :disabled="apiHandle.isLoading.value"
             @click="closeModal"
           >
             Cancel
-          </button>
-          <button type="submit" :class="['btn', { loading: apiHandle.isLoading.value }]">
-            Add
-          </button>
+          </Button>
+          <Button type="submit" :loading="apiHandle.isLoading.value"> Add </Button>
         </div>
       </form>
     </template>
@@ -42,12 +40,17 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { twMerge } from 'tailwind-merge'
 import { PlusIcon } from '@heroicons/vue/20/solid'
 
 import { Form, FormField } from '@/core/forms'
 import { Validators } from '@/core/forms/validators'
-import { HeroModal, FormInputField, FormTextField, Status } from '@/features/common/components'
+import {
+  Button,
+  FormInputField,
+  FormTextField,
+  HeroModal,
+  Status,
+} from '@/features/common/components'
 
 import { useTodosStore } from '../store'
 import { storeToRefs } from 'pinia'

@@ -1,6 +1,6 @@
 <template>
   <div class="mb-3">
-    <label v-if="label" :for="inputId">{{ label }}</label>
+    <label v-if="label" class="mb-1 inline-block" :for="inputId">{{ label }}</label>
     <textarea
       :id="inputId"
       :rows="rows"

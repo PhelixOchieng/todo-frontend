@@ -24,9 +24,10 @@
       <div class="flex items-center gap-x-1">
         <Modal show-title>
           <template #trigger="{ openModal }">
-            <button
+            <Button
+              variant="icon"
               :class="[
-                'btn-icon h-7 w-7 translate-x-1 bg-transparent text-slate-900 transition-[color,background-color,transform]',
+                'h-7 w-7 translate-x-1 bg-transparent text-slate-900 transition-[color,background-color,transform]',
                 'duration-200 hover:!bg-primary/20 hover:!delay-0 group-hover:bg-primary/10 group-hover:text-primary-dark',
                 'group-hover:translate-x-0 group-hover:delay-[400ms]',
                 'group/btn relative',
@@ -45,7 +46,7 @@
                   'group-hover/btn:opacity-100',
                 ]"
               />
-            </button>
+            </Button>
           </template>
           <template #title>
             <h2 class="text-center">Todo Details</h2>
@@ -79,9 +80,10 @@
             <BackButton class="mx-auto mt-6" @click="closeModal" custom />
           </template>
         </Modal>
-        <button
+        <Button
+          variant="icon"
           :class="[
-            'btn-icon translate-x-1 bg-transparent p-1 text-slate-900 transition-[color,background-color,transform]',
+            'translate-x-1 p-1.5 bg-transparent text-slate-900 transition-[color,background-color,transform]',
             'duration-200 hover:!bg-primary/20 hover:!delay-0',
             apiHandle.isLoading.value && todoIDBeingUpdated === todo.id.toString()
               ? 'loading'
@@ -91,17 +93,18 @@
         >
           <XMarkIcon v-if="todo.isCompleted" class="h-4 w-4" />
           <CheckIcon v-else class="h-4 w-4" />
-        </button>
+        </Button>
         <DropdownButton :items="todoActions" class="z-[2]">
           <template #trigger>
-            <button
+            <Button
+							variant="icon"
               :class="[
-                'btn-icon bg-transparent p-1 text-slate-900 transition-colors duration-300',
+                'bg-transparent p-1.5 text-slate-900 transition-colors duration-300',
                 'hover:!bg-primary/20 group-hover:bg-primary/10 group-hover:text-primary-dark',
               ]"
             >
               <EllipsisVerticalIcon class="h-4 w-4" />
-            </button>
+            </Button>
           </template>
           <template #dropdown-item="{ item, active, close }">
             <button
@@ -173,7 +176,7 @@ import {
 } from '@heroicons/vue/24/solid'
 
 import { useApiHandle } from '@/core/api/composables'
-import { DropdownButton, BackButton, Modal, Snackbar } from '@/features/common/components'
+import { Button, DropdownButton, BackButton, Modal, Snackbar } from '@/features/common/components'
 
 import TodoModel from '../models/todo.model'
 import type { TTodoUpdatePayload } from '../services'

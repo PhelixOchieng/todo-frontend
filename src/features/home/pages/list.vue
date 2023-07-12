@@ -18,7 +18,10 @@
           class="w-full max-w-lg text-sm sm:px-0"
           @change="(index) => (selectedTodoType = index)"
         >
-          <div class="flex sticky top-0 z-[1000] backdrop-blur py-3 items-center justify-between gap-x-2">
+          <div
+            class="sticky top-0 flex items-center justify-between gap-x-2 py-3 backdrop-blur"
+            :style="{ zIndex: todos.length + 1 }"
+          >
             <TabList class="flex flex-1 space-x-1 rounded-xl bg-slate-200 p-1">
               <Tab
                 v-for="(type, i) of todoTypes"
@@ -39,7 +42,7 @@
                 </button>
               </Tab>
             </TabList>
-						<AddTodo class="max-sm:fixed" />
+            <AddTodo class="max-sm:fixed" />
           </div>
           <div class="mb-2 hidden h-[1px] bg-slate-200 md:block" aria-hidden="true" />
           <TabPanels class="mt-2">

@@ -11,25 +11,25 @@
     <p v-if="todo.description" class="opacity-60">{{ todo.description }}</p>
   </div>
   <div class="mt-8 flex justify-center gap-x-2">
-    <button
+    <Button
+			variant="text"
       type="button"
-      class="btn-text rounded-md"
       :disabled="apiHandle.isLoading.value"
       @click="closeModal"
     >
       Cancel
-    </button>
-    <button
+    </Button>
+    <Button
       type="submit"
       :class="[
-        'btn bg-red-100 text-red-700 hover:bg-red-200',
+        'bg-red-100 text-red-700 hover:bg-red-200',
         'focus:ring-red-100 focus:ring-offset-red-300',
-        { loading: apiHandle.isLoading.value },
       ]"
+			:loading="apiHandle.isLoading.value"
       @click="deleteTodo"
     >
       Delete
-    </button>
+    </Button>
   </div>
 </template>
 
@@ -37,7 +37,7 @@
 import { storeToRefs } from 'pinia'
 
 import { useApiHandle } from '@/core/api/composables'
-import { Status } from '@/features/common/components'
+import { Button, Status } from '@/features/common/components'
 
 import { useTodosStore } from '../store'
 import type TodoModel from '../models/todo.model'
