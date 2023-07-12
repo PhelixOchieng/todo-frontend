@@ -4,14 +4,18 @@ import type {
   IEmailVerificationPayload,
   ILoginPayload,
   IPasswordResetPayload,
+  ISignupPayload,
 } from './services/interface'
 import { authService } from './services/service'
-import { isTokenValidForAdmin, saveAuthToken } from '@/common/functional'
+import { saveAuthToken } from '@/common/functional'
 import { getErrorMessage } from '@/common/functional/errors'
 
 interface IState {
   loginApiStatus: IApiRequestStatus
   loginApiMsg: string
+
+  signupApiStatus: IApiRequestStatus
+  signupApiMsg: string
 
   emailVerificationApiStatus: IApiRequestStatus
   emailVerificationApiMsg: string
@@ -24,6 +28,9 @@ interface IState {
 const state = (): IState => ({
   loginApiStatus: IApiRequestStatus.Default,
   loginApiMsg: '',
+
+  signupApiStatus: IApiRequestStatus.Default,
+  signupApiMsg: '',
 
   emailVerificationApiStatus: IApiRequestStatus.Default,
   emailVerificationApiMsg: '',
@@ -52,6 +59,21 @@ export const useAuthStore = defineStore('auth-store', {
 
         const message = getErrorMessage(e)
         this.loginApiMsg = message
+      }
+    },
+    async signup(payload: ISignupPayload) {
+      try {
+        this.signupApiStatus = IApiRequestStatus.Loading
+        this.signupApiMsg = ''
+
+        await authService.signup(payload)
+
+        this.signupApiStatus = IApiRequestStatus.Success
+      } catch (e) {
+        this.signupApiStatus = IApiRequestStatus.Error
+
+        const message = getErrorMessage(e)
+        this.signupApiMsg = message
       }
     },
 

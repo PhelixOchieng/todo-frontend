@@ -2,6 +2,7 @@ import type { RouteRecordRaw } from 'vue-router'
 
 import IndexView from './index.vue'
 import LoginView from './pages/login.vue'
+import SignupView from './pages/signup.vue'
 import PasswordResetView from './pages/reset-password.vue'
 
 export const authRoutes: RouteRecordRaw[] = [
@@ -17,6 +18,11 @@ export const authRoutes: RouteRecordRaw[] = [
         name: 'login',
         component: LoginView
       },
+			{
+				path: 'signup',
+				name: 'signup',
+				component: SignupView,
+			},
 			{
 				path: 'reset-password',
 				name: 'password-reset',

@@ -7,6 +7,8 @@ import type {
   TLoginApiResponse,
   IPasswordResetPayload,
   TPasswordResetApiResponse,
+  ISignupPayload,
+  TSignupApiResponse,
 } from './interface'
 
 const basePath = '/auth'
@@ -15,6 +17,14 @@ export const authService = {
   async login(payload: ILoginPayload) {
     return new Promise<TLoginApiResponse>((resolve, reject) => {
       api.post(`${basePath}/login/`, payload, {
+        onSuccess: resolve,
+        onError: reject,
+      })
+    })
+  },
+  async signup(payload: ISignupPayload) {
+    return new Promise<TSignupApiResponse>((resolve, reject) => {
+      api.post(`${basePath}/signup/`, payload, {
         onSuccess: resolve,
         onError: reject,
       })

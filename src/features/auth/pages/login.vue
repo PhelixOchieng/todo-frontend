@@ -12,6 +12,12 @@
         >
           Your password has been reset successfully. Log in to continue
         </Status>
+        <Status
+          v-else-if="apiHandle.isDefault.value && $route.query.isSignupSuccess"
+          variant="success"
+        >
+          Your account was successfully created. You can now login.
+        </Status>
         <form class="space-y-3" @submit.prevent="login">
           <FormInputField label="Email" name="email" type="email" :field="email">
             <template #suffix> <EmailIcon /> </template>
@@ -46,9 +52,13 @@
         <RouterLink class="mt-10 block" :to="{ name: 'password-reset' }">
           Reset Password
         </RouterLink>
+        <p>
+          Dont have an account?
+          <RouterLink :to="{ name: 'signup' }">Signup Instead</RouterLink>
+        </p>
       </div>
     </div>
-    <div class="hidden flex-1 bg-gradient-to-r from-white to-primary/80 sm:block"></div>
+    <div class="relative hidden flex-1 bg-gradient-to-r from-white to-primary/80 sm:block"></div>
   </div>
 </template>
 
@@ -70,15 +80,15 @@ const store = useAuthStore()
 const { loginApiStatus: apiStatus, loginApiMsg: apiMsg } = storeToRefs(store)
 const apiHandle = useApiHandle(apiStatus)
 
+const route = useRoute()
 const form = new Form({
-  email: new FormField(null, [Validators.required, Validators.email]),
+  email: new FormField(route.query.email ?? null, [Validators.required, Validators.email]),
   password: new FormField(null, [Validators.required]),
 })
 
 const isPasswordVisible = ref(false)
 
 const router = useRouter()
-const route = useRoute()
 async function login() {
   if (!form.validate()) return
 

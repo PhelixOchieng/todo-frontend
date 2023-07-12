@@ -17,3 +17,12 @@ export interface IPasswordResetPayload {
 }
 export type TPasswordResetApiResponse = IApiResponse<never>;
 
+export interface ISignupPayload {
+	username: string;
+	email: string;
+	firstName: string;
+	lastName: string;
+	password: string;
+}
+export type TSignupApiResponse = IApiResponse<never>;
+

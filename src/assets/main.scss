@@ -1,6 +1,6 @@
 @tailwind base;
-@tailwind components;
 @tailwind utilities;
+@tailwind components;
 
 @layer base {
   html,
@@ -16,6 +16,11 @@
     -webkit-appearance: none;
   }
 
+  input[type='password']::-ms-reveal,
+  input[type='password']::-ms-clear {
+    display: none;
+  }
+
   table:not(.default) {
     th,
     td {
@@ -25,125 +30,15 @@
 }
 
 @layer components {
-  .c-container {
-    @apply mx-auto px-3 md:max-w-7xl;
+  a:not(.default) {
+    @apply text-primary transition-colors hover:text-primary-dark dark:text-primary-dark dark:hover:text-primary;
   }
 
-  .flex-centered {
-    @apply flex items-center justify-center;
+  .c-container {
+    @apply mx-auto px-3 2xl:max-w-7xl;
   }
 
   .grid-centered {
     @apply grid place-items-center;
-  }
-
-  .btn {
-    @apply rounded-md bg-primary text-on-primary hover:bg-primary-dark dark:bg-primary-dark dark:text-on-primary-dark;
-
-    &.loading {
-      @apply grayscale;
-
-      &::after,
-      &::before {
-        @apply border-white;
-      }
-    }
-
-    &:disabled {
-      @apply bg-black/30;
-    }
-  }
-
-  .btn-text {
-    @apply rounded-full bg-transparent;
-
-    &.loading {
-      &::after,
-      &::before {
-        @apply border-primary;
-      }
-    }
-  }
-
-  .btn,
-  .btn-text {
-    @apply px-3 py-2;
-
-    &-icon {
-      // @extend .btn, .btn-text;
-      @apply flex items-center gap-x-2 rounded-full px-3 py-2 text-primary;
-
-      svg {
-        @apply h-5 w-5;
-      }
-    }
-  }
-
-  .btn-text,
-  .btn-icon,
-  .btn-text-icon {
-    @apply bg-primary/10 text-primary-dark transition-colors hover:bg-primary/20 dark:bg-primary/10 dark:text-primary-dark dark:hover:bg-primary/20;
-
-    &:disabled {
-      @apply bg-transparent text-black/50;
-    }
-  }
-
-  .btn,
-  .btn-text,
-  .btn-icon {
-    @apply transition-colors;
-
-    &:focus,
-    &:focus-visible,
-    &:focus-within {
-      @apply outline-none ring-4 ring-primary/10 ring-offset-2 ring-offset-primary/40;
-    }
-
-    &.loading {
-      @apply pointer-events-none relative text-transparent;
-    }
-
-    &.loading::after,
-    &.loading::before {
-      @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border-2;
-      content: '';
-      width: 20px;
-      height: 20px;
-    }
-
-    &.loading::before {
-      @apply opacity-30;
-    }
-
-    &.loading::after {
-      @apply border-r-transparent border-t-transparent;
-      animation: rotate 1s infinite linear;
-    }
-
-    &:disabled {
-      @apply cursor-not-allowed;
-    }
-  }
-
-  .btn-icon {
-    @apply cursor-pointer p-3;
-  }
-
-  .btn-icon,
-  .btn-text-icon {
-    &.micro:hover > svg {
-      @apply rotate-90 transition-transform duration-300;
-    }
-  }
-}
-
-@keyframes rotate {
-  0% {
-    transform: translate(-50%, -50%) rotate(0);
-  }
-
-  100% {
-    transform: translate(-50%, -50%) rotate(360deg);
   }
 }

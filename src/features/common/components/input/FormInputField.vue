@@ -13,10 +13,13 @@
       :disabled="disabled"
     >
       <template #label>
-        <label v-if="label" class="flex gap-x-1 mb-1" :for="inputID">
+        <label v-if="label" class="mb-1 flex gap-x-1" :for="inputID">
           {{ label }}
           <span v-if="field.hasValidator(Validators.required)" class="text-red-500">*</span>
         </label>
+      </template>
+      <template #suffix-icon>
+        <slot name="suffix" />
       </template>
     </InputField>
     <div v-if="field.errors" class="mt-1 text-sm text-red-500">
