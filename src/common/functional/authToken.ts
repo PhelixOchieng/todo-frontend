@@ -18,7 +18,7 @@ export function retrieveAuthToken(category: TokenCategory): string | null {
   }
 }
 
-export function removeAuthToken(): void {
+export function removeAuthTokens(): void {
 	localStorage.removeItem(TokenCategory.Access)
 	localStorage.removeItem(TokenCategory.Refresh)
 }

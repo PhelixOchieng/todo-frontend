@@ -27,6 +27,13 @@ const config = {
         // text-colors
         light: colors.slate[900],
         dark: colors.slate[50],
+
+				// surface
+				surface: {
+					// DEFAULT: "#fafcff",
+					DEFAULT: "#fff",
+					dark: "#1d1d1d",
+				}
       },
     },
   },

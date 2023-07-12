@@ -14,19 +14,21 @@
       <slot />
     </p>
     <slot name="action">
-      <button
+      <Button
         v-if="variant === 'error' && shouldRetry"
-        class="btn mt-2 block w-max"
+        class="mt-2 block w-max"
         @click.prevent.strop="$emit('retry')"
       >
         Retry
-      </button>
+      </Button>
     </slot>
   </div>
 </template>
 
 <script setup lang="ts">
 import { twMerge } from 'tailwind-merge'
+
+import { Button } from './buttons';
 
 defineOptions({
   inheritAttrs: false,

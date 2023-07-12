@@ -6,5 +6,5 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 
-import TopNav from './common/components/TopNav.vue'
+import { TopNav } from '@/features/common/components'
 </script>

@@ -1,5 +1,9 @@
 import { IApiRequestStatus } from '@/core/api'
 import { defineStore } from 'pinia'
+
+import { isAuthTokenValid, removeAuthTokens, saveAuthToken } from '@/common/functional'
+import { getErrorMessage } from '@/common/functional/errors'
+
 import type {
   IEmailVerificationPayload,
   ILoginPayload,
@@ -7,12 +11,11 @@ import type {
   ISignupPayload,
 } from './services/interface'
 import { authService } from './services/service'
-import { saveAuthToken } from '@/common/functional'
-import { getErrorMessage } from '@/common/functional/errors'
 
 interface IState {
   loginApiStatus: IApiRequestStatus
   loginApiMsg: string
+	isUserAuthed: boolean
 
   signupApiStatus: IApiRequestStatus
   signupApiMsg: string
@@ -28,6 +31,7 @@ interface IState {
 const state = (): IState => ({
   loginApiStatus: IApiRequestStatus.Default,
   loginApiMsg: '',
+	isUserAuthed: isAuthTokenValid(),
 
   signupApiStatus: IApiRequestStatus.Default,
   signupApiMsg: '',
@@ -53,6 +57,7 @@ export const useAuthStore = defineStore('auth-store', {
         saveAuthToken(tokens)
 
         this.verifiedEmail = null
+				this.isUserAuthed = true
         this.loginApiStatus = IApiRequestStatus.Success
       } catch (e) {
         this.loginApiStatus = IApiRequestStatus.Error
@@ -116,5 +121,12 @@ export const useAuthStore = defineStore('auth-store', {
         this.passwordResetApiMsg = message
       }
     },
+
+
+		// Reset
+		logout() {
+			this.isUserAuthed = false;
+			removeAuthTokens();
+		}
   },
 })

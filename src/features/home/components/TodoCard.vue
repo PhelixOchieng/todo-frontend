@@ -206,14 +206,14 @@ interface ITodoAction {
 }
 const todoActions: ITodoAction[] = [
   {
-    key: 'editTodo',
+    key: 'edit',
     name: 'Edit',
     outlineIcon: UpdateOutlineIcon,
     solidIcon: UpdateSolidIcon,
     onSelect: () => (isUpdateModalOpen.value = true),
   },
   {
-    key: 'deleteTodo',
+    key: 'delete',
     name: 'Delete',
     outlineIcon: TrashOutlineIcon,
     solidIcon: TrashSolidIcon,

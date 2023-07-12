@@ -19,7 +19,7 @@
           @change="(index) => (selectedTodoType = index)"
         >
           <div
-            class="sticky top-0 flex items-center justify-between gap-x-2 py-3 backdrop-blur"
+            class="sticky top-16 flex items-center justify-between gap-x-2 bg-surface py-3 dark:bg-surface-dark"
             :style="{ zIndex: todos.length + 1 }"
           >
             <TabList class="flex flex-1 space-x-1 rounded-xl bg-slate-200 p-1">
@@ -56,7 +56,7 @@
                 v-for="i in todoTypes.length"
                 :key="`todo-type-view-${i}`"
                 :class="[
-                  'space-y-2 rounded-xl bg-white',
+                  'space-y-2 rounded-xl bg-surface dark:bg-surface-dark',
                   'relative ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
                 ]"
                 :tab-index="0"

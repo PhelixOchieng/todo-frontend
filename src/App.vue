@@ -9,6 +9,7 @@ import { RouterView } from 'vue-router'
 <style lang="scss">
 html,
 body {
+	@apply bg-surface;
   scroll-behavior: smooth;
 }
 </style>

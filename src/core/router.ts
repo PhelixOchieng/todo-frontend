@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import { isAuthTokenValid } from '@/common/functional'
+import IndexView from '@/features/index.vue'
 
 import { authRoutes } from '@/features/auth/routes'
 import { homeRoutes } from '@/features/home/routes'
@@ -9,7 +10,14 @@ import { errorsRoutes } from '@/features/errors/routes'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [...authRoutes, ...homeRoutes, ...profileRoutes, ...errorsRoutes],
+  routes: [
+    ...authRoutes,
+    {
+      path: '',
+      component: IndexView,
+      children: [...homeRoutes, ...profileRoutes, ...errorsRoutes],
+    },
+  ],
 })
 
 router.beforeEach((to) => {
