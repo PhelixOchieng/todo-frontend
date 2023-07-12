@@ -26,13 +26,10 @@
     </section>
     <section class="mt-6">
       <h2>Actions</h2>
-      <button
-        v-if="authStore.isUserAuthed"
-        :class="['btn-text mt-4', { loading: isLoggingOut }]"
-        @click="logout"
-      >
+      <Button v-if="authStore.isUserAuthed" variant="text-icon" class="mt-4" :loading="isLoggingOut" @click="logout">
         Logout
-      </button>
+				<LogoutIcon />
+      </Button>
     </section>
   </div>
 </template>
@@ -41,10 +38,11 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
+import { ArrowRightOnRectangleIcon as LogoutIcon } from '@heroicons/vue/20/solid'
 
 import { delay } from '@/common/functional'
 import { useApiHandle } from '@/core/api/composables'
-import { AvatarImage, Status } from '@/features/common/components'
+import { AvatarImage, Button, Status } from '@/features/common/components'
 
 import UpdateProfile from '../components/UpdateProfile.vue'
 
@@ -70,6 +68,6 @@ async function logout() {
   authStore.logout()
 
   isLoggingOut.value = false
-  router.replace({ name: 'home' })
+  router.replace({ name: 'login' })
 }
 </script>
