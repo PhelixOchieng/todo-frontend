@@ -23,21 +23,15 @@ const state = (): IState => ({
   userUpdateApiMsg: '',
 })
 
-export const useUserStore = defineStore('user', {
+export const useProfileStore = defineStore('profile', {
   state,
   actions: {
     async getProfile() {
       try {
         this.userApiStatus = IApiRequestStatus.Loading
         this.userApiMsg = ''
-
-        // this.user = UserModel.fromJson({
-        //   first_name: 'Test',
-        //   last_name: 'Testy',
-        //   email: 'test@ac.ac',
-        //   account_type: 'admin',
-        // })
-        const response = await userService.getProfile()
+        
+				const response = await userService.getProfile()
         const data = response.data.data
         this.user = UserModel.fromJson(data)
 

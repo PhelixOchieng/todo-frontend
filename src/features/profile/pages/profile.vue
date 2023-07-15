@@ -62,10 +62,10 @@ import { AvatarImage, Button, Status } from '@/features/common/components'
 import UpdateProfile from '../components/UpdateProfile.vue'
 
 import { useAuthStore } from '../../auth/store'
-import { useUserStore } from '../store'
+import { useProfileStore } from '../store'
 
 const authStore = useAuthStore()
-const store = useUserStore()
+const store = useProfileStore()
 const { userApiStatus: apiStatus, userApiMsg: apiMsg, user } = storeToRefs(store)
 const apiHandle = useApiHandle(apiStatus)
 
