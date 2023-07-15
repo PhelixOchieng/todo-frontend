@@ -11,7 +11,7 @@ import type {
   ISignupPayload,
 } from './services/interface'
 import { authService } from './services/service'
-import { useUserStore } from '../profile/store'
+import { useProfileStore } from '../profile/store'
 
 interface IState {
   loginApiStatus: IApiRequestStatus
@@ -129,7 +129,7 @@ export const useAuthStore = defineStore('auth-store', {
 			this.isUserAuthed = false;
 			removeAuthTokens();
 
-			const profileStore = useUserStore()
+			const profileStore = useProfileStore()
 			profileStore.reset()
 		}
   },

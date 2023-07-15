@@ -19,17 +19,15 @@
         <FormInputField label="Email" type="email" :field="email" />
 
         <div class="!mt-6 flex justify-end gap-x-3">
-          <button
+          <Button
+            variant="text"
             type="button"
-            class="btn-text rounded"
             :disabled="apiHandle.isLoading.value"
             @click="closeModal"
           >
-            Close
-          </button>
-          <button type="submit" :class="['btn', { loading: apiHandle.isLoading.value }]">
-            Update
-          </button>
+            Cancel
+          </Button>
+          <Button type="submit" :loading="apiHandle.isLoading.value"> Update </Button>
         </div>
       </form>
     </template>
@@ -48,11 +46,11 @@ import { Button, Modal, FormInputField, Status } from '@/features/common/compone
 
 import type UserModel from '../models/user.model'
 import type { TUserUpdatePayload } from '../service'
-import { useUserStore } from '../store'
+import { useProfileStore } from '../store'
 
 const props = defineProps<{ user: UserModel }>()
 
-const store = useUserStore()
+const store = useProfileStore()
 const { userUpdateApiStatus: apiStatus, userUpdateApiMsg: apiMsg } = storeToRefs(store)
 const apiHandle = useApiHandle(apiStatus)
 
@@ -66,8 +64,8 @@ function update(closeModal: () => void) {
   if (!form.validate()) return
 
   const payload: TUserUpdatePayload = {
-    first_name: firstName.value.value.value!,
-    last_name: lastName.value.value.value!,
+    firstName: firstName.value.value.value!,
+    lastName: lastName.value.value.value!,
     email: email.value.value.value!,
   }
   store.updateProfile(payload)
