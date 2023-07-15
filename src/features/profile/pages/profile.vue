@@ -28,8 +28,16 @@
           <p>{{ user.email }}</p>
         </div>
         <div>
-          <p class="text-sm opacity-70">Joined</p>
-          <p>{{ parseTime(user.createdAt) }}</p>
+          <div class="flex gap-x-8">
+            <div>
+              <p class="text-sm opacity-70">Joined</p>
+              <p>{{ parseTime(user.createdAt) }}</p>
+            </div>
+            <div v-if="user.updatedAt">
+              <p class="text-sm opacity-70">Updated</p>
+              <p>{{ parseTime(user.updatedAt) }}</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>

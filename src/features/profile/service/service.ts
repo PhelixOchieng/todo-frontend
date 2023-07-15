@@ -13,7 +13,7 @@ export const userService = {
   },
   async updateProfile(payload: TUserUpdatePayload) {
     return new Promise<TUserUpdateApiResponse>((resolve, reject) => {
-      api.post('/profile/', payload, {
+      api.patch('/profile/', payload, {
         onSuccess: resolve,
         onError: reject,
       })

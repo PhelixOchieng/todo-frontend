@@ -8,9 +8,9 @@
     </template>
     <template #default="{ closeModal }">
       <p class="mb-6 text-center text-xl">Update Profile</p>
-      <Status v-if="apiHandle.isError.value" variant="error" :should-retry="false">{{
-        apiMsg
-      }}</Status>
+      <Status v-if="apiHandle.isError.value" variant="error" :should-retry="false">
+        {{ apiMsg }}
+      </Status>
       <form class="space-y-2" @submit.prevent="() => update(closeModal)">
         <div class="flex gap-x-4">
           <FormInputField label="First Name" :field="firstName" />
@@ -60,7 +60,7 @@ const form = new Form({
   email: new FormField(props.user.email, [[Validators.required, 'Email is required']]),
 })
 
-function update(closeModal: () => void) {
+async function update(closeModal: () => void) {
   if (!form.validate()) return
 
   const payload: TUserUpdatePayload = {
@@ -68,7 +68,7 @@ function update(closeModal: () => void) {
     lastName: lastName.value.value.value!,
     email: email.value.value.value!,
   }
-  store.updateProfile(payload)
+	await store.updateProfile(payload)
 
   if (!apiHandle.isSuccess.value) return
   closeModal()
