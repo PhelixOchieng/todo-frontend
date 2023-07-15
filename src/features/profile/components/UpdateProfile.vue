@@ -1,10 +1,10 @@
 <template>
   <Modal @close="close">
     <template #trigger="{ openModal }">
-      <button class="btn-text-icon" @click="openModal">
+      <Button variant="text-icon" @click="openModal">
         <PencilIcon />
         Update
-      </button>
+      </Button>
     </template>
     <template #default="{ closeModal }">
       <p class="mb-6 text-center text-xl">Update Profile</p>
@@ -44,7 +44,7 @@ import { PencilIcon } from '@heroicons/vue/24/solid'
 import { Form, FormField } from '@/core/forms'
 import { useApiHandle } from '@/core/api/composables'
 import { Validators } from '@/core/forms/validators'
-import { Modal, FormInputField, Status } from '@/features/common/components'
+import { Button, Modal, FormInputField, Status } from '@/features/common/components'
 
 import type UserModel from '../models/user.model'
 import type { TUserUpdatePayload } from '../service'

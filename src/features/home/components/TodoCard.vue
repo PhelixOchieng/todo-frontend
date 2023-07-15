@@ -83,12 +83,13 @@
         <Button
           variant="icon"
           :class="[
-            'translate-x-1 p-1.5 bg-transparent text-slate-900 transition-[color,background-color,transform]',
+            'translate-x-1 bg-transparent p-1.5 text-slate-900 transition-[color,background-color,transform]',
             'duration-200 hover:!bg-primary/20 hover:!delay-0',
-            apiHandle.isLoading.value && todoIDBeingUpdated === todo.id.toString()
-              ? 'loading'
-              : 'group-hover:translate-x-0 group-hover:bg-primary/10 group-hover:text-primary-dark group-hover:delay-300',
+            apiHandle.isLoading.value &&
+              todoIDBeingUpdated === todo.id.toString() &&
+              'group-hover:translate-x-0 group-hover:bg-primary/10 group-hover:text-primary-dark group-hover:delay-300',
           ]"
+          :loading="apiHandle.isLoading.value && todoIDBeingUpdated === todo.id.toString()"
           @click.stop="toggleCompleted"
         >
           <XMarkIcon v-if="todo.isCompleted" class="h-4 w-4" />
@@ -97,7 +98,7 @@
         <DropdownButton :items="todoActions" class="z-[2]">
           <template #trigger>
             <Button
-							variant="icon"
+              variant="icon"
               :class="[
                 'bg-transparent p-1.5 text-slate-900 transition-colors duration-300',
                 'hover:!bg-primary/20 group-hover:bg-primary/10 group-hover:text-primary-dark',

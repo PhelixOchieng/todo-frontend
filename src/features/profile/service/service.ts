@@ -5,7 +5,7 @@ import type { TUserApiResponse, TUserUpdatePayload, TUserUpdateApiResponse } fro
 export const userService = {
   async getProfile() {
     return new Promise<TUserApiResponse>((resolve, reject) => {
-      api.get('/user/profile/', {
+      api.get('/profile/', {
         onSuccess: resolve,
         onError: reject,
       })
@@ -13,7 +13,7 @@ export const userService = {
   },
   async updateProfile(payload: TUserUpdatePayload) {
     return new Promise<TUserUpdateApiResponse>((resolve, reject) => {
-      api.post('/user/profile', payload, {
+      api.post('/profile/', payload, {
         onSuccess: resolve,
         onError: reject,
       })

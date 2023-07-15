@@ -1,15 +1,20 @@
 export interface IUserJson {
-  _id: string
-  first_name: string
-  last_name: string
+  id: string
+	userName: string
+  firstName: string
+  lastName: string
   email: string
-  account_type: string
+	createdAt: string;
+	updatedAt: string | null;
 }
 
 export interface IUser {
   id: string
+	username: string
   firstName: string
   lastName: string
   email: string
-  isAdmin: boolean
+	createdAt: Date;
+	updatedAt: Date | null;
+	avatarUrl: string | null;
 }

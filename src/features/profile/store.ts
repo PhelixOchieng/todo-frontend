@@ -38,7 +38,7 @@ export const useUserStore = defineStore('user', {
         //   account_type: 'admin',
         // })
         const response = await userService.getProfile()
-        const data = response.data
+        const data = response.data.data
         this.user = UserModel.fromJson(data)
 
         this.userApiStatus = IApiRequestStatus.Success
@@ -55,7 +55,7 @@ export const useUserStore = defineStore('user', {
         this.userUpdateApiMsg = ''
 
         const response = await userService.updateProfile(payload)
-        const data = response.data
+        const data = response.data.data
         this.user = UserModel.fromJson(data)
 
         this.userUpdateApiStatus = IApiRequestStatus.Success

@@ -1,7 +1,7 @@
 <template>
   <button
     v-bind="attrs"
-    :class="twMerge(variants[variant], 'relative', $attrs.class as string, loading && 'pointer-events-none grayscale transition-colors text-transparent')"
+    :class="twMerge(variants[variant], 'relative', $attrs.class as string, loading && 'pointer-events-none grayscale transition-colors !text-transparent')"
   >
     <slot />
     <div

@@ -11,5 +11,5 @@
 import { twMerge } from 'tailwind-merge'
 import { PhotoIcon } from '@heroicons/vue/24/outline'
 
-defineProps<{ src?: string; iconClass?: string; imgClass?: string }>()
+defineProps<{ src?: string | null; iconClass?: string; imgClass?: string }>()
 </script>
