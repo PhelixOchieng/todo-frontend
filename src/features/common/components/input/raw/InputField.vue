@@ -17,8 +17,10 @@
         ]"
         :min="min"
         :max="max"
-        @input="(e) => inputChange(e as InputEvent)"
         :disabled="disabled"
+        @input="(e) => inputChange(e as InputEvent)"
+				@focus="(e) => $emit('focus', e)"
+				@blur="(e) => $emit('blur', e)"
       />
       <div
         ref="slotx"
@@ -60,8 +62,10 @@ const props = withDefaults(
   },
 )
 const emit = defineEmits<{
-  (e: 'update:modelValue', data: string): void
-  (e: 'input', evt: InputEvent): void
+  'update:modelValue': [data: string]
+  input: [evt: InputEvent]
+  focus: [evt: FocusEvent]
+  blur: [evt: FocusEvent]
 }>()
 
 function inputChange(evt: InputEvent) {

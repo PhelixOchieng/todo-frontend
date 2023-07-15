@@ -11,6 +11,8 @@
       :min="min"
       :max="max"
       :disabled="disabled"
+      @focus="(e) => $emit('focus', e)"
+      @blur="(e) => $emit('blur', e)"
     >
       <template #label>
         <label v-if="label" class="mb-1 flex gap-x-1" :for="inputID">
@@ -55,6 +57,10 @@ const props = withDefaults(defineProps<IProps>(), {
   type: 'text',
   autocomplete: 'off',
 })
+defineEmits<{
+  focus: [evt: FocusEvent]
+  blur: [evt: FocusEvent]
+}>()
 
 const value = props.field.value as Ref<string | number | null>
 watch(value, () => {
