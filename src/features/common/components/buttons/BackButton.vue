@@ -1,16 +1,17 @@
 <template>
   <div class="flex w-max items-center gap-x-2">
-    <button class="btn-icon p-3" @click="gotoRoute">
+    <Button variant="icon" class="" @click="gotoRoute">
       <ArrowLongLeftIcon class="h-5 w-5" />
-    </button>
+    </Button>
     <slot />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useRouter, type RouteLocationRaw } from 'vue-router'
-
 import { ArrowLongLeftIcon } from '@heroicons/vue/24/outline'
+
+import { Button } from '.';
 
 const props = defineProps<{ custom?: boolean; to?: RouteLocationRaw }>()
 const emit = defineEmits<{ click: [] }>()

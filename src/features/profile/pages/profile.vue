@@ -1,7 +1,9 @@
 <template>
   <div class="px-3 pt-4">
     <div class="flex items-center justify-between">
-      <h1 class="mb-4">My Profile</h1>
+      <BackButton class="mb-4">
+        <h1>My Profile</h1>
+      </BackButton>
       <UpdateProfile v-if="user" :user="user" />
     </div>
     <Status v-if="apiHandle.isError.value" variant="error" @retry="getProfile">{{ apiMsg }}</Status>
@@ -65,7 +67,7 @@ import { ArrowRightOnRectangleIcon as LogoutIcon } from '@heroicons/vue/20/solid
 
 import { delay, parseTime } from '@/common/functional'
 import { useApiHandle } from '@/core/api/composables'
-import { AvatarImage, Button, Status } from '@/features/common/components'
+import { AvatarImage, BackButton, Button, Status } from '@/features/common/components'
 
 import UpdateProfile from '../components/UpdateProfile.vue'
 
