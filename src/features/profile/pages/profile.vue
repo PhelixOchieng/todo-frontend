@@ -33,11 +33,11 @@
           <div class="flex gap-x-8">
             <div>
               <p class="text-sm opacity-70">Joined</p>
-              <p>{{ parseTime(user.createdAt) }}</p>
+              <p>{{ parseDate(user.createdAt) }}</p>
             </div>
             <div v-if="user.updatedAt">
               <p class="text-sm opacity-70">Updated</p>
-              <p>{{ parseTime(user.updatedAt) }}</p>
+              <p>{{ parseDate(user.updatedAt) }}</p>
             </div>
           </div>
         </div>
@@ -65,7 +65,7 @@ import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { ArrowRightOnRectangleIcon as LogoutIcon } from '@heroicons/vue/20/solid'
 
-import { delay, parseTime } from '@/common/functional'
+import { delay, parseDate } from '@/common/functional'
 import { useApiHandle } from '@/core/api/composables'
 import { AvatarImage, BackButton, Button, Status } from '@/features/common/components'
 
@@ -79,7 +79,6 @@ const store = useProfileStore()
 const { userApiStatus: apiStatus, userApiMsg: apiMsg, user } = storeToRefs(store)
 const apiHandle = useApiHandle(apiStatus)
 
-getProfile()
 function getProfile() {
   store.getProfile()
 }

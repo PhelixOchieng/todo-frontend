@@ -2,20 +2,20 @@ import { defineStore } from 'pinia'
 
 import { IApiRequestStatus } from '@/core/api'
 import { getErrorMessage } from '@/core/api/utils'
+import { delay } from '@/common/functional'
 
-import TodoModel from './models/todo.model'
+import TodoModel, { TodoDetailsModel } from './models/todo.model'
 import type { ITodosParams, TTodoAddPayload, TTodoUpdatePayload } from './services/interface'
 import { todosService } from './services/service'
-import { delay } from '@/common/functional'
 
 interface IState {
   todosApiStatus: IApiRequestStatus
   todosApiMsg: string
-  todos: TodoModel[]
+  todos: TodoModel[] | null
 
   todoApiStatus: IApiRequestStatus
   todoApiMsg: string
-  todo: TodoModel | null
+  todo: TodoDetailsModel | null
 
   todoUpdateApiStatus: IApiRequestStatus
   todoUpdateApiMsg: string
@@ -31,7 +31,7 @@ interface IState {
 const state = (): IState => ({
   todosApiStatus: IApiRequestStatus.Default,
   todosApiMsg: '',
-  todos: [],
+  todos: null,
 
   todoApiStatus: IApiRequestStatus.Default,
   todoApiMsg: '',
@@ -75,7 +75,7 @@ export const useTodosStore = defineStore('todosStore', {
 
         const response = await todosService.retrieveOne(id)
         const data = response.data.data
-        this.todo = TodoModel.fromJson(data)
+        this.todo = TodoDetailsModel.fromJson(data)
 
         this.todoApiStatus = IApiRequestStatus.Success
       } catch (e) {
@@ -93,7 +93,7 @@ export const useTodosStore = defineStore('todosStore', {
 
         const response = await todosService.updateOne(id, payload)
         const data = response.data.data
-        const todo = TodoModel.fromJson(data)
+        const todo = TodoDetailsModel.fromJson(data)
         if (todo.id === this.todo?.id) this.todo = todo
 
         const todoIdx = this.todos?.findIndex((t) => t.id === todo.id) ?? -1
@@ -116,7 +116,7 @@ export const useTodosStore = defineStore('todosStore', {
 
         const response = await todosService.addOne(payload)
         const data = response.data.data
-        const todo = TodoModel.fromJson(data)
+        const todo = TodoDetailsModel.fromJson(data)
         // Just delay for the add in animations 😉
         delay(500, () => void this.todos!.unshift(todo))
 
@@ -146,5 +146,13 @@ export const useTodosStore = defineStore('todosStore', {
         this.todoDeleteApiMsg = message
       }
     },
+
+		
+		// reset
+		reset() {
+			this.todos = null;
+			this.todo = null;
+			this.todoIDBeingUpdated = null;
+		}
   },
 })

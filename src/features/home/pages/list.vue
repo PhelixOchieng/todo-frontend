@@ -1,49 +1,56 @@
 <template>
-  <main class="c-container pb-20 pt-4 md:max-w-lg">
-    <div v-if="apiHandle.isLoading.value" class="flex items-center gap-x-3">
+  <main class="c-container pb-24 pt-2 md:max-w-lg md:pt-4">
+    <div v-if="isInitialLoad && apiHandle.isLoading.value" class="flex items-center gap-x-3">
       <p>Fetching todos...</p>
       <DotsLoader />
     </div>
     <Status v-else-if="apiHandle.isError.value" variant="error" @retry="getTodos">
       {{ apiMsg }}
     </Status>
-    <template v-else>
-      <div v-if="todos.length === 0" class="text-center">
-        <p>You have not added any todos yet</p>
-      </div>
-      <template v-else>
-        <TabGroup
-          :selected-index="selectedTodoType"
-          as="div"
-          class="w-full max-w-lg text-sm sm:px-0"
-          @change="(index) => (selectedTodoType = index)"
+    <template v-else-if="todos">
+      <InputField
+        v-model="searchQuery"
+        class="mb-1"
+        placeholder="Type to search"
+        :disabled="searchQuery.trim() === '' && !todos.length"
+      />
+      <TabGroup
+        :selected-index="selectedTodoType"
+        as="div"
+        class="w-full max-w-lg sm:px-0"
+        @change="(index) => (selectedTodoType = index)"
+      >
+        <div
+          class="sticky top-14 flex items-center justify-between bg-surface py-3 dark:bg-surface-dark sm:gap-x-2 md:top-16"
+          :style="{ zIndex: todos.length + 1 }"
         >
-          <div
-            class="sticky top-16 flex items-center justify-between gap-x-2 bg-surface py-3 dark:bg-surface-dark"
-            :style="{ zIndex: todos.length + 1 }"
-          >
-            <TabList class="flex flex-1 space-x-1 rounded-xl bg-slate-200 p-1">
-              <Tab
-                v-for="(type, i) of todoTypes"
-                :key="`todo-btn-${i}`"
-                as="template"
-                v-slot="{ selected }"
+          <TabList class="flex flex-1 space-x-1 rounded-xl bg-slate-200 p-1">
+            <Tab
+              v-for="(type, i) of todoTypes"
+              :key="`todo-btn-${i}`"
+              as="template"
+              v-slot="{ selected }"
+            >
+              <button
+                :class="[
+                  'w-full rounded-lg py-2 text-sm leading-5 text-slate-900',
+                  'ring-white ring-opacity-60 ring-offset-2 ring-offset-primary focus:outline-none focus:ring-2',
+                  selected
+                    ? 'bg-white shadow'
+                    : 'text-blue-100 hover:bg-primary/10 hover:text-primary-dark',
+                ]"
               >
-                <button
-                  :class="[
-                    'w-full rounded-lg py-2 text-sm leading-5 text-slate-900',
-                    'ring-white ring-opacity-60 ring-offset-2 ring-offset-primary focus:outline-none focus:ring-2',
-                    selected
-                      ? 'bg-white shadow'
-                      : 'text-blue-100 hover:bg-primary/10 hover:text-primary-dark',
-                  ]"
-                >
-                  {{ type }}
-                </button>
-              </Tab>
-            </TabList>
-            <AddTodo class="max-sm:fixed" />
-          </div>
+                {{ type }}
+              </button>
+            </Tab>
+          </TabList>
+          <AddTodo class="max-sm:fixed" />
+        </div>
+        <p v-if="searchQuery.trim() === '' && todos.length === 0" class="mt-2 text-center">
+          You have not added any todos yet.<br />
+          Click the plus button to add your first todo
+        </p>
+        <template v-else>
           <div class="mb-2 hidden h-[1px] bg-slate-200 md:block" aria-hidden="true" />
           <TabPanels class="mt-2">
             <TransitionGroup
@@ -82,8 +89,8 @@
               </TabPanel>
             </TransitionGroup>
           </TabPanels>
-        </TabGroup>
-      </template>
+        </template>
+      </TabGroup>
     </template>
   </main>
 </template>
@@ -94,12 +101,13 @@ import { storeToRefs } from 'pinia'
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
 
 import { useApiHandle } from '@/core/api/composables'
-import { DotsLoader, Status } from '@/features/common/components'
+import { DotsLoader, Status, InputField } from '@/features/common/components'
 
 import { useTodosStore } from '../store'
 import TodoModel from '../models/todo.model'
 import TodoCard from '../components/TodoCard.vue'
 import AddTodo from '../components/AddTodo.vue'
+import type { ITodosParams } from '../services'
 
 const store = useTodosStore()
 const { todosApiStatus: apiStatus, todosApiMsg: apiMsg, todos } = storeToRefs(store)
@@ -109,8 +117,9 @@ const prevSelectedTodoType = ref(0)
 const selectedTodoType = ref(1)
 const todoTypes = ['All', 'Not Completed', 'Completed'] as const
 const todosToShow = computed<TodoModel[]>(() => {
-  const selected = todoTypes[selectedTodoType.value]
+  if (todos.value === null) return []
 
+  const selected = todoTypes[selectedTodoType.value]
   if (selected === 'Completed') return todos.value.filter((todo) => todo.isCompleted)
   if (selected === 'Not Completed') return todos.value.filter((todo) => !todo.isCompleted)
 
@@ -122,13 +131,31 @@ watch(selectedTodoType, (idx) => {
   prevSelectedTodoType.value = idx
 })
 
+const searchQuery = ref('')
+let searchTimeout: number | null = null
+watch(searchQuery, () => {
+  if (searchTimeout) clearTimeout(searchTimeout)
+
+  // Debounce the searching of todos from the search input
+  searchTimeout = setTimeout(getTodos, 800)
+})
+
+const lastItemId = ref<number | null>(null)
+
 getTodos()
 function getTodos() {
-  store.getTodos({
-    page: 1,
-    pageSize: 100,
-  })
+  const params: ITodosParams = {
+    lastItemId: lastItemId.value,
+    pageSize: 3,
+  }
+
+  const query = searchQuery.value.trim()
+  if (query !== '') params.search = query
+
+  store.getTodos(params)
 }
+
+const isInitialLoad = computed<boolean>(() => todos.value === null)
 </script>
 
 <style lang="scss" scoped>

@@ -1,6 +1,6 @@
 <template>
   <TopNav />
-  <RouterView class="pb-8" />
+  <RouterView />
 </template>
 
 <script setup lang="ts">

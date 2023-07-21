@@ -38,6 +38,10 @@
     @apply mx-auto px-3 2xl:max-w-7xl;
   }
 
+	.smallcaps {
+		font-variant: small-caps;
+	}
+
   .grid-centered {
     @apply grid place-items-center;
   }

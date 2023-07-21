@@ -45,7 +45,7 @@ const form = new Form({
   description: new FormField(props.todo.description),
 })
 
-const isCompleted = ref(false)
+const isCompleted = ref(props.todo.isCompleted)
 async function addTodo() {
   if (!form.validate()) return
 
@@ -62,7 +62,7 @@ async function addTodo() {
 }
 
 function closeModal() {
-  form.reset()
+  // form.reset()
   emit('closeModal')
 }
 

@@ -12,11 +12,12 @@ import type {
 } from './services/interface'
 import { authService } from './services/service'
 import { useProfileStore } from '../profile/store'
+import { useTodosStore } from '../home/store'
 
 interface IState {
   loginApiStatus: IApiRequestStatus
   loginApiMsg: string
-	isUserAuthed: boolean
+  isUserAuthed: boolean
 
   signupApiStatus: IApiRequestStatus
   signupApiMsg: string
@@ -32,7 +33,7 @@ interface IState {
 const state = (): IState => ({
   loginApiStatus: IApiRequestStatus.Default,
   loginApiMsg: '',
-	isUserAuthed: isAuthTokenValid(),
+  isUserAuthed: isAuthTokenValid(),
 
   signupApiStatus: IApiRequestStatus.Default,
   signupApiMsg: '',
@@ -58,7 +59,7 @@ export const useAuthStore = defineStore('auth-store', {
         saveAuthToken(tokens)
 
         this.verifiedEmail = null
-				this.isUserAuthed = true
+        this.isUserAuthed = true
         this.loginApiStatus = IApiRequestStatus.Success
       } catch (e) {
         this.loginApiStatus = IApiRequestStatus.Error
@@ -123,14 +124,13 @@ export const useAuthStore = defineStore('auth-store', {
       }
     },
 
+    // Reset
+    logout() {
+      this.isUserAuthed = false
+      removeAuthTokens()
 
-		// Reset
-		logout() {
-			this.isUserAuthed = false;
-			removeAuthTokens();
-
-			const profileStore = useProfileStore()
-			profileStore.reset()
-		}
+      useProfileStore().reset()
+			useTodosStore().reset()
+    },
   },
 })

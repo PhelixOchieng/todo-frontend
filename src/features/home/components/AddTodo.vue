@@ -2,10 +2,11 @@
   <HeroModal :show-title="true" @close="handleModalClose">
     <template #trigger="{ openModal }">
       <Button
-        :class="[
+        :class="twMerge(
           'left-1/2 aspect-square -translate-x-1/2 rounded-xl p-3 max-md:bottom-8 max-sm:fixed',
           'md:left-0 md:right-10 md:top-0 md:translate-x-0',
-        ]"
+					$attrs.class as string,
+        )"
         @click="openModal"
       >
         <PlusIcon class="h-5 w-5" />
@@ -40,6 +41,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { twMerge } from 'tailwind-merge'
 import { PlusIcon } from '@heroicons/vue/20/solid'
 
 import { Form, FormField } from '@/core/forms'

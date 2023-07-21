@@ -12,15 +12,15 @@
         :value="inputValue"
         :class="[
           'w-full rounded border-slate-300 bg-transparent transition focus:border-primary focus:ring-primary dark:border-slate-300/20',
-          hasSuffixIcon ? 'pr-6' : '',
+          { 'pr-6': hasSuffixIcon },
           inputClasses,
         ]"
         :min="min"
         :max="max"
         :disabled="disabled"
         @input="(e) => inputChange(e as InputEvent)"
-				@focus="(e) => $emit('focus', e)"
-				@blur="(e) => $emit('blur', e)"
+        @focus="(e) => $emit('focus', e)"
+        @blur="(e) => $emit('blur', e)"
       />
       <div
         ref="slotx"

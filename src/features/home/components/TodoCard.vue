@@ -22,64 +22,35 @@
         />
       </div>
       <div class="flex items-center gap-x-1">
-        <Modal show-title>
-          <template #trigger="{ openModal }">
-            <Button
-              variant="icon"
+        <RouterLink
+          custom
+          v-slot="{ navigate }"
+          :to="{ name: 'todo-details', params: { id: todo.id } }"
+        >
+          <Button
+            variant="icon"
+            :class="[
+              'h-7 w-7 translate-x-1 bg-transparent text-slate-900 transition-[color,background-color,transform]',
+              'duration-200 hover:!bg-primary/20 hover:!delay-0 group-hover:bg-primary/10 group-hover:text-primary-dark',
+              'group-hover:translate-x-0 group-hover:delay-[400ms]',
+              'group/btn relative',
+            ]"
+            @click="navigate"
+          >
+            <ViewOutlineIcon
               :class="[
-                'h-7 w-7 translate-x-1 bg-transparent text-slate-900 transition-[color,background-color,transform]',
-                'duration-200 hover:!bg-primary/20 hover:!delay-0 group-hover:bg-primary/10 group-hover:text-primary-dark',
-                'group-hover:translate-x-0 group-hover:delay-[400ms]',
-                'group/btn relative',
+                'absolute left-1/2 top-1/2 !h-4 !w-4 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300',
+                'group-hover/btn:opacity-0',
               ]"
-              @click="openModal"
-            >
-              <ViewOutlineIcon
-                :class="[
-                  'absolute left-1/2 top-1/2 !h-4 !w-4 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300',
-                  'group-hover/btn:opacity-0',
-                ]"
-              />
-              <ViewSolidIcon
-                :class="[
-                  'absolute left-1/2 top-1/2 !h-4 !w-4 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-300',
-                  'group-hover/btn:opacity-100',
-                ]"
-              />
-            </Button>
-          </template>
-          <template #title>
-            <h2 class="text-center">Todo Details</h2>
-          </template>
-          <template #default="{ closeModal }">
-            <div class="space-y-4">
-              <div>
-                <p class="text-xs font-bold uppercase">Title</p>
-                <p class="">{{ todo.title }}</p>
-              </div>
-              <div v-if="todo.description">
-                <p class="text-xs font-bold uppercase">Description</p>
-                <p class="">{{ todo.description }}</p>
-              </div>
-              <div v-if="todo.isCompleted">
-                <p class="text-xs font-bold uppercase">Completed</p>
-                <p class="">{{ parseDate(todo.completedAt) }}</p>
-              </div>
-              <div class="flex gap-x-4">
-                <div class="flex-1">
-                  <p class="text-xs font-bold uppercase">Created</p>
-                  <p class="">{{ parseDate(todo.createdAt) }}</p>
-                </div>
-                <div class="flex-1">
-                  <p class="text-xs font-bold uppercase">Updated</p>
-                  <p class="">{{ parseDate(todo.updatedAt) }}</p>
-                </div>
-              </div>
-            </div>
-
-            <BackButton class="mx-auto mt-6" @click="closeModal" custom />
-          </template>
-        </Modal>
+            />
+            <ViewSolidIcon
+              :class="[
+                'absolute left-1/2 top-1/2 !h-4 !w-4 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-300',
+                'group-hover/btn:opacity-100',
+              ]"
+            />
+          </Button>
+        </RouterLink>
         <Button
           variant="icon"
           :class="[
@@ -136,6 +107,9 @@
       <p v-if="todo.isCompleted">Completed: {{ parseDate(todo.completedAt!) }}</p>
       <p v-else>Created: {{ parseDate(todo.createdAt) }}</p>
     </div>
+		
+		<!-- DO NOT REMOVE THIS LINE -->
+		<p class="hidden">{{ rebuildTrigger }}</p>
 
     <Snackbar v-model="isSnackbarOpen" type="error" :msg="apiMsg" :timeout="0" />
     <Modal v-model="isUpdateModalOpen" show-title :use-internal-state="false">
@@ -158,10 +132,10 @@
 </template>
 
 <script setup lang="ts">
-import { type FunctionalComponent, ref } from 'vue'
+import { type FunctionalComponent, ref, onMounted, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { twMerge } from 'tailwind-merge'
-import { differenceInDays, differenceInMonths, format, formatRelative } from 'date-fns'
+import { differenceInDays, differenceInHours } from 'date-fns'
 import { EllipsisVerticalIcon, XMarkIcon } from '@heroicons/vue/20/solid'
 import {
   CalendarDaysIcon,
@@ -177,13 +151,16 @@ import {
 } from '@heroicons/vue/24/solid'
 
 import { useApiHandle } from '@/core/api/composables'
-import { Button, DropdownButton, BackButton, Modal, Snackbar } from '@/features/common/components'
+import { parseDate } from '@/common/functional'
+import { Button, DropdownButton, Modal, Snackbar } from '@/features/common/components'
 
 import TodoModel from '../models/todo.model'
 import type { TTodoUpdatePayload } from '../services'
 import { useTodosStore } from '../store'
 import UpdateTodo from '../components/UpdateTodo.vue'
 import DeleteTodo from '../components/DeleteTodo.vue'
+
+const props = defineProps<{ todo: TodoModel }>()
 
 const store = useTodosStore()
 const {
@@ -193,7 +170,6 @@ const {
 } = storeToRefs(store)
 const apiHandle = useApiHandle(apiStatus)
 
-const props = defineProps<{ todo: TodoModel }>()
 const isSnackbarOpen = ref(false)
 const isUpdateModalOpen = ref(false)
 const isDeleteModalOpen = ref(false)
@@ -230,14 +206,30 @@ async function toggleCompleted() {
   await store.updateTodo(props.todo.id.toString(), payload)
 }
 
-function parseDate(date: Date | null): string {
-  if (date === null) return ''
-
+const rebuildTrigger = ref(false)
+let createdAtTimer: number | null = null
+let updatedAtTimer: number | null = null
+function handleTimer(date: Date): number | null {
   const now = new Date()
 
-  if (differenceInDays(date, now) <= 7)
-    return formatRelative(date, now).replace(/^\w/, (v) => v.toUpperCase())
-  else if (differenceInMonths(date, now) <= 12) return format(date, 'MMM do, yyyy')
-  else return format(date, 'dd-MM-yyyy')
+  const diffInDays = differenceInDays(now, date)
+  if (diffInDays > 1) return null
+
+  let timeout = 1000 * 60
+
+  const diffInHours = differenceInHours(now, date)
+  if (diffInHours > 1) timeout *= 60
+
+  return setInterval(() => (rebuildTrigger.value = !rebuildTrigger.value), timeout)
 }
+onMounted(() => {
+  const todo = props.todo
+  createdAtTimer = handleTimer(todo.createdAt)
+
+  if (todo.updatedAt) updatedAtTimer = handleTimer(todo.updatedAt)
+})
+onUnmounted(() => {
+  if (createdAtTimer !== null) clearInterval(createdAtTimer)
+  if (updatedAtTimer !== null) clearInterval(updatedAtTimer)
+})
 </script>
